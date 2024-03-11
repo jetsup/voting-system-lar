@@ -23,11 +23,19 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $genderID = fake()->numberBetween(1, 2);
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            "first_name" => fake()->firstName(($genderID == 1) ? "male" : "female"),
+            "last_name" => fake()->lastName(($genderID == 1) ? "male" : "female"),
+            "gender_id" => $genderID,
+            "dob" => fake()->date($format = 'Y-m-d', $max = "-18 year"),
+            "constituency_id" => fake()->numberBetween(1, 290),
+            "ward" => fake()->streetName(),
+            "email" => fake()->unique()->email(),
+            "phone" => fake()->phoneNumber(),
+            "email_verified_at" => fake()->dateTimeThisDecade("-3 year"),
+            "password" => bcrypt("Voter123."),
+            "dp" => "user.png",
             'remember_token' => Str::random(10),
         ];
     }
