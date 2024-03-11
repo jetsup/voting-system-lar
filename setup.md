@@ -14,6 +14,12 @@ Copy the env file and set up your desired settings, this include database creden
 cp .env.example .env
 ```
 
+Then you will need to install dependencies, by running:
+
+```bash
+composer update
+```
+
 Generate the key that will be used for most of your servers operations:
 
 ```bash
@@ -40,4 +46,18 @@ To change the port, you have to specify which port to be used, simply run:
 
 ```bash
 php artisan serve --port=8090 # to run the server in port 8090. Adjust as per you need
+```
+
+## Running the project
+
+Run the project by running:
+
+```bash
+php artisan serve
+```
+
+Or you can specify the port to run the server on by running:
+
+```bash
+php artisan serve --port=PORT_NUMBER # eg 3000
 ```
