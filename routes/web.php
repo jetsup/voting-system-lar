@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,21 +16,28 @@ use Illuminate\Support\Facades\Route;
 
 // Page Routes
 Route::get("/", function () {
+    if(auth()->user()){
+        if(auth()->user()->user_type_id = 1){
+            return view("admin/dashboard");
+        }else{
+            return view("voter/dashboard");
+        }
+    }
+    // this will be a login screen
     return view("index");
 });
 
-Route::get("dashboard", function () {
-    return view("admin/dashboard");
+Route::get("add-voter", function () {
+    return view("admin/add-voter");
 });
 // End Page Routes
 
 // Authentication
-Route::get("login", function () {
-    return view("login");
-});
+Route::get("login", [UserController::class,"login"]);
 
-Route::post("signin", function () {
-});
+Route::post("signin", [UserController::class,"signin"]);
+
+Route::get("logout", [UserController::class,"logout"]);
 
 Route::get("register", function () {
     return view("register");

@@ -408,7 +408,7 @@
 
 <body
     style="background-image:url('{{ asset('images/ballot.jpg') }}'); background-size:cover; background-position:center;">
-
+    {{-- TODO: Add alpine js for displaying popups --}}
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100 p-t-190 p-b-30">
@@ -417,16 +417,8 @@
                     <span class="login100-form-title p-t- p-b-40 m-b-10" style="color: orange; opacity: 0.9;">
                         ONLINE VOTING</span>
                     </span>
-                    {{-- <div class="wrap-input100 validate-input m-b-10">
-                        <select name="loginas" required class="input100 validate-input">
-                            <option value="" name="">Login as</option>
-                            <option value="admin" name="admin">Admin</option>
-                            <option value="voter" name="voter">Voter</option>
-                        </select>
-                        <span class="focus-input100"></span>
-                    </div> --}}
                     <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
-                        <input name="username" class="input100" required type="text" placeholder="Username">
+                        <input name="email" class="input100" required type="email" placeholder="Email">
                         <span class="focus-input100"></span>
                         <i class="fa fa-user" style="position: absolute;left: 355px; bottom: 16px;"
                             onclick="show()"></i>
@@ -435,10 +427,6 @@
                     <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
                         <input name="password" class="input100" required type="password" placeholder="Password"
                             id="password">
-
-                        {{-- <a style="position: absolute;left: 355px; bottom: 16px;">
-                            <img src="{{-- static 'images/blind.png'" onclick="show()">
-                        </a> --}}
                         <i class="fa fa-eye" style="position: absolute;left: 355px; bottom: 16px;" onclick="show()"></i>
                     </div>
 
@@ -452,14 +440,6 @@
                             Forgot Password?
                         </a>
                     </div>
-
-                    {{-- <div class="text-center w-full">
-                        <a class="txt1" href="/registervidpage">
-                            Register
-                        </a>
-                    </div> --}}
-                    {{-- <div>
-                    </div> --}}
                 </div>
                 <div class="login100-form-title p-t- p-b-40 m-b-10">
                     {{-- {% for message in messages %}
