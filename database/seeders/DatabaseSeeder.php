@@ -176,7 +176,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             "first_name" => "Voter",
             "last_name" => "User",
-            "password" => bcrypt("User123."),
+            "password" => bcrypt("Voter123."),
             "phone" => "0711111111",
             "email" => "voter@account.com",
             "dob" => "2000-10-23",

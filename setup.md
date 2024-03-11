@@ -61,3 +61,13 @@ Or you can specify the port to run the server on by running:
 ```bash
 php artisan serve --port=PORT_NUMBER # eg 3000
 ```
+
+## Data
+
+The project utilizes seeded data at it's core. Default `admin` user and a sample `voter` accounts qre created in the seed therefore it will be necessary to run the command with seed option
+
+```bash
+php artisan migrate:refresh --seed
+```
+
+The default credentials are **email:** `admin@account.com` **password:** `Admin123.` for the admin and **email:** `voter@account.com` **password:** `Voter123.` for the voter account.
