@@ -1,4 +1,3 @@
-{{-- {% extends 'admin/master.html' %} --}}
 <x-master-admin>
     <script>
         function getCounties(provinceID) {
@@ -8,13 +7,13 @@
                 return;
             }
             var ajax = new XMLHttpRequest();
-            ajax.open("GET", "get_counties/?province_id=" + provinceID, true);
+            ajax.open("GET", "/data/get_counties/" + provinceID, true);
             ajax.onload = function() {
                 var list = JSON.parse(this.responseText);
                 var option = "";
                 option += "<option value=''>-- COUNTY --</option>";
                 for (var i = 0; i < list.length; i++) {
-                    option += "<option value='" + list[i]['county_id'] + "'>" + list[i]['county_name'] + "</option>";
+                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['county'] + "</option>";
                 }
                 document.getElementById("county").innerHTML = option;
             };
@@ -27,13 +26,13 @@
                 return;
             }
             var ajax = new XMLHttpRequest();
-            ajax.open("GET", "get_constituencies/?county_id=" + countyID, true);
+            ajax.open("GET", "/data/get_constituencies/" + countyID, true);
             ajax.onload = function() {
                 var list = JSON.parse(this.responseText);
                 var option = "";
                 option += "<option value=''>-- CONSTITUENCY --</option>";
                 for (var i = 0; i < list.length; i++) {
-                    option += "<option value='" + list[i]['constituency_id'] + "'>" + list[i]['constituency_name'] +
+                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['constituency'] +
                         "</option>";
                 }
                 document.getElementById("constituency").innerHTML = option;
@@ -46,7 +45,7 @@
         <!--header start-->
 
         <!--main content start-->
-        <section id="main-content" style=" margin-right:110px;">
+        <section id="main-content" style=" margin-right:120px;">
             <section class="wrapper">
                 <div class="row">
                     <div class="col-lg-12">
@@ -66,7 +65,7 @@
                             </header>
                             <div class="panel-body">
                                 <form class="form-horizontal" method="post" enctype="multipart/form-data"
-                                    action="add_voter">
+                                    action="/add_voter">
                                     @csrf
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Voter Image</label>
@@ -82,7 +81,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-10">
-                                            <input type="file" required accept="image/*" name="vphoto"
+                                            <input type="file" required accept="image/*" name="dp"
                                                 onchange="loadfile(event)" style="position: relative; left: 90px;">
                                             <script>
                                                 var loadfile = function(event) {
@@ -96,10 +95,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Voter ID</label>
+                                        <label class="col-sm-2 control-label">ID Number</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control round-input" name="vid"
-                                                required maxlength="8" pattern="^[0-9]{6,8}$"
+                                            <input type="number" class="form-control round-input" name="id_number"
+                                                required minlength="6" maxlength="8" pattern="^[0-9]{6,8}$"
                                                 onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
                         if(this.checkValidity()) form.pwd2.pattern = RegExp.escape(this.value);"
                                                 title="Only A-Z and 0-9 allowed minimum 10 characters"
@@ -107,31 +106,40 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Name</label>
+                                        <label class="col-sm-2 control-label">First Name</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name="name" required
+                                            <input type="text" name="first_name" minlength="3" required
                                                 class="form-control round-input" oninput="this.setCustomValidity('')"
-                                                oninvalid="this.setCustomValidity('Enter Name')" style="width:80%;">
+                                                oninvalid="this.setCustomValidity('Enter First Name')"
+                                                style="width:80%;">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Father Name</label>
+                                        <label class="col-sm-2 control-label">Last Name</label>
                                         <div class="col-sm-10">
-                                            <input type="text" required name="fname"
+                                            <input type="text" required name="last_name" minlength="3"
                                                 class="form-control round-input" oninput="this.setCustomValidity('')"
-                                                oninvalid="this.setCustomValidity('Enter Father Name')"
+                                                oninvalid="this.setCustomValidity('Enter Last Name')"
+                                                style="width:80%;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Middle Name</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="middle_name" minlength="3"
+                                                class="form-control round-input" oninput="this.setCustomValidity('')"
+                                                oninvalid="this.setCustomValidity('Enter Middle Name')"
                                                 style="width:80%;">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Gender</label>
                                         <div class="col-sm-10">
-                                            <select name="gender" class="form-control round-input" required
+                                            <select name="gender_id" class="form-control round-input" required
                                                 style="width:80%;">
                                                 <option selected value="">Gender</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                                <option value="Others">Others</option>
+                                                <option value="1">Male</option>
+                                                <option value="2">Female</option>
                                             </select>
                                         </div>
                                     </div>
@@ -144,36 +152,30 @@
                                             <span class="error" id="lblError"></span>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label class="col-sm-2 control-label">Address</label>
                                         <div class="col-sm-10">
                                             <textarea required name="address" class="form-control round-input" style="width:80%;"></textarea>
                                         </div>
-                                    </div>
-                                    <!-- TODO: This will actually change to password -->
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Pincode</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" name="pincode" required maxlength="6"
-                                                pattern="[0-9]{6}$" class="form-control round-input" style="width:80%;">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Verify Pincode</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" name="pincode-confirmation" required
-                                                maxlength="6" pattern="[0-9]{6}$" class="form-control round-input"
-                                                style="width:80%;">
-                                        </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Mobile Number</label>
                                         <div class="col-sm-10">
                                             <input type="tel" pattern="^0[17]\d{8}$"
                                                 oninput="this.setCustomValidity('')" style="width:80%;"
                                                 oninvalid="this.setCustomValidity('Enter your Number')" required
-                                                maxlength="10" name="mno" id="mno"
-                                                class="form-control round-input">
+                                                maxlength="10" name="phone" id="phone"
+                                                placeholder="07xxxxxxxx/01xxxxxxxx" class="form-control round-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" oninput="this.setCustomValidity('')"
+                                                style="width:80%;"
+                                                oninvalid="this.setCustomValidity('Enter your Email address')" required
+                                                name="email" id="email"
+                                                placeholder="someone@example.com" class="form-control round-input">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -186,12 +188,12 @@
                                         <script>
                                             // Fetch the database for the provinces using ajax
                                             var ajax = new XMLHttpRequest();
-                                            ajax.open("GET", "get_provinces/", true);
+                                            ajax.open("GET", "/data/get_provinces", true);
                                             ajax.onload = function() {
                                                 var list = JSON.parse(this.responseText);
                                                 var option = "<option value=''>-- PROVINCE --</option>";
                                                 for (var i = 0; i < list.length; i++) {
-                                                    option += "<option value='" + list[i]['province_id'] + "'>" + list[i]['province_name'] + "</option>";
+                                                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['province'] + "</option>";
                                                 }
                                                 document.getElementById("province").innerHTML = option;
                                             };
@@ -209,12 +211,47 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Assembly Constituency</label>
+                                        <label class="col-sm-2 control-label">Constituency</label>
                                         <div class="col-sm-10">
-                                            <select name="constituency" class="form-control round-input"
+                                            <select name="constituency_id" class="form-control round-input"
                                                 style="width:80%;" id="constituency">
                                                 <option value="">-- SELECT COUNTY --</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Ward</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" oninput="this.setCustomValidity('')"
+                                                style="width:80%;"
+                                                oninvalid="this.setCustomValidity('Provide your Ward')" required
+                                                minlength="4" name="ward" id="ward"
+                                                placeholder="eg. Starehe" class="form-control round-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Account Type</label>
+                                        <div class="col-sm-10">
+                                            <select name="user_type_id" class="form-control round-input" required
+                                                style="width:80%;">
+                                                <option value="2">Voter</option>
+                                                <option value="1">Admin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- TODO: This will actually change to password -->
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" name="password" required minlength="8"
+                                                class="form-control round-input" style="width:80%;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Password Confirmation</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" name="password_confirmation" required
+                                                minlength="8" class="form-control round-input" style="width:80%;">
                                         </div>
                                     </div>
                                     <div class="form-group">

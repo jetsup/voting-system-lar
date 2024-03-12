@@ -27,6 +27,7 @@ class UserFactory extends Factory
         return [
             "first_name" => fake()->firstName(($genderID == 1) ? "male" : "female"),
             "last_name" => fake()->lastName(($genderID == 1) ? "male" : "female"),
+            "id_number" => fake()->numberBetween(1000000, 99999999),
             "gender_id" => $genderID,
             "dob" => fake()->date($format = 'Y-m-d', $max = "-18 year"),
             "constituency_id" => fake()->numberBetween(1, 290),

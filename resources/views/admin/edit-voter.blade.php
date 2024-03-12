@@ -21,7 +21,7 @@
                                  Voter
                              </header>
                              <div class="panel-body">
-                                 <form class="form-horizontal " method="POST" action="edit_voter">
+                                 <form class="form-horizontal " method="POST" action="edit-voter">
                                      @csrf
                                      <div class="form-group">
                                          <label class="col-sm-2 control-label">Voter ID</label>
@@ -52,6 +52,7 @@
                                  </form>
                              </div>
                          </section>
+                         <center>Should Display User details here for editing</center>
                      </div>
                  </div>
              </section>

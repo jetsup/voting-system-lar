@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     // set this variable to `false` if you don't want to add dummy data to the database
-    const GENERATE_DUMMY_DATA = true;
+    const GENERATE_DUMMY_DATA = false;
 
     /**
      * Seed the application's database.
@@ -165,21 +165,27 @@ class DatabaseSeeder extends Seeder
         User::create([
             "first_name" => "Admin",
             "last_name" => "Admin",
+            "id_number" => 1000000,
             "password" => bcrypt("Admin123."),
+            "gender_id" => 1,
             "user_type_id" => 1,
             "phone" => "0700000000",
             "email" => "admin@account.com",
             "dob" => "2000-10-23",
+            "constituency_id" =>123,
             "ward" => "KASARANI",
         ]);
         // Create a normal user
         User::create([
             "first_name" => "Voter",
             "last_name" => "User",
+            "id_number"=>1000001,
             "password" => bcrypt("Voter123."),
+            "gender_id" => 2,
             "phone" => "0711111111",
             "email" => "voter@account.com",
             "dob" => "2000-10-23",
+            "constituency_id" => 200,
             "ward" => "KASARANI",
         ]);
         // Create Dummy Users

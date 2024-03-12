@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("first_name");
             $table->string("last_name");
             $table->string("middle_name")->nullable()->default(null);
+            $table->bigInteger("id_number", false, true)->unique();
             $table->foreignId("gender_id")->nullable()->constrained("genders")->nullOnDelete()->cascadeOnUpdate();
             $table->date("dob")->nullable(false);
             $table->foreignId("constituency_id")->nullable()->constrained("constituencies")->nullOnDelete()->cascadeOnUpdate();

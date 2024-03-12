@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Constituencies;
+use App\Models\Counties;
+use App\Models\Provinces;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -14,7 +17,8 @@ class UserController extends Controller
         $formFields = $request->validate([
             "first_name" => ["required", "min:3"],
             "last_name" => ["required", "min:3"],
-            "middle_name" => ["min:3"],
+            // "middle_name" => ["min:3"],
+            "id_number" => ["required", "min:6", Rule::unique("users", "id_number")],
             // specify that the gender input can either be 1,2 or 3
             "gender_id" => ["required", Rule::in([1, 2])],
             "dob" => ["required"],
@@ -39,11 +43,8 @@ class UserController extends Controller
         // create the user
         $user = User::create($formFields);
 
-        // login the user after creation
-        auth()->login($user);
-
-        // redirect to home page
-        return redirect("/")->with("message", "You have been logged in. Your account was created successfully!");
+        // redirect back to adding new user
+        return back("/")->with("message", "Voter added successfully!");
     }
 
     // logout the user

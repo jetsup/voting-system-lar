@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +38,10 @@ Route::get("add-voter", function () {
 
 Route::get("edit-voter", function () {
     return view("admin/edit-voter");
+});
+
+Route::post("edit-voter", function (Request $request) {
+    // TODO: check if edit or delete
 });
 
 Route::get("view-voter", function () {
@@ -79,7 +86,7 @@ Route::get("voting", function () {
 Route::get("voting", function () {
     return view("admin/voting");
 });
-// End Admin candidadte
+// End Admin candidate
 
 // Results and Reports
 Route::get("generate-result", function () {
@@ -125,9 +132,7 @@ Route::get("voting-process", function () {
 // End Voting process
 
 // Voter profile
-Route::get("profile", function () {
-    return view("voter/profile");
-});
+Route::get("profile", [SystemUserController::class, "get_profile"]);
 // End Voter profile
 
 // Voter election
@@ -155,9 +160,14 @@ Route::get("register", function () {
     return view("register");
 })->middleware("auth");
 
-Route::post("signup", function () {
-});
+Route::post("add_voter", [UserController::class, "store"]);
 // End Authentication
 
+/************************DATA FETCH API(JSON)*****************************/
 // Data Requests
+Route::get("data/get_provinces", [LocationController::class, "get_provinces"]);
+Route::get("data/get_counties/{provinceID}", [LocationController::class, "get_counties"]);
+Route::get("data/get_constituencies/{countyID}", [LocationController::class, "get_constituencies"]);
+
+Route::get("data/view_voters", [SystemUserController::class, "getVotersByLoc"]);
 // End DataRequests

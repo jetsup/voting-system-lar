@@ -1,339 +1,43 @@
 <x-master-admin>
     <script>
-        function st(s1, s2) {
-            var s1 = document.getElementById(s1);
-            var s2 = document.getElementById(s2);
-            s2.innerHTML = "";
-            if (s1.value == "ANDAMAN AND NICOBAR ISLANDS", "GOA", "GUJARAT", "ANDHRA PRADESH", "ARUNACHAL PRADESH", "ASSAM",
-                "BIHAR", "CHANDIGARH", "CHHATTISGARH", "DADRA &amp; NAGAR HAVELI", "DAMAN &amp; DIU", "HARYANA",
-                "HIMACHAL PRADESH", "JAMMU & KASHMIR", "JHARKHAND", "KARNATAKA", "KERALA", "LAKSHADWEEP", "MADHYA PRADESH",
-                "MAHARASHTRA", "MEGHALAYA", "MIZORAM", "NAGALAND", "NCT OF DELHI ", "ODISHA", "PUDUCHERRY", "PUNJAB",
-                "RAJASTHAN", "SIKKIM", "TAMIL NADU", "TELANGANA", "TRIPURA", "UTTAR PRADESH", "UTTARAKHAND", "WEST BENGAL"
-            ) {
-                var optionArray = ["|", "Parliamentary|Parliamentary", "Assembly|Assembly"];
+        function getCounties(provinceID) {
+            if (provinceID == "") {
+                document.getElementById("county").innerHTML = "<option value=''>-- SELECT PROVINCE --</option>";
+                document.getElementById("constituency").innerHTML = "<option value=''>-- SELECT COUNTY --</option>";
+                return;
             }
-            for (var option in optionArray) {
-                var pair = optionArray[option].split("|");
-                var newOption = document.createElement("option");
-                newOption.value = pair[0];
-                newOption.innerHTML = pair[1];
-                s2.options.add(newOption);
-            }
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "/data/get_counties/" + provinceID, true);
+            ajax.onload = function() {
+                var list = JSON.parse(this.responseText);
+                var option = "";
+                option += "<option value=''>-- COUNTY --</option>";
+                for (var i = 0; i < list.length; i++) {
+                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['county'] + "</option>";
+                }
+                document.getElementById("county").innerHTML = option;
+            };
+            ajax.send();
         }
 
-        function st2(s2, s3) {
-            var s1 = document.getElementById("states");
-            var s2 = document.getElementById(s2);
-            var s3 = document.getElementById(s3);
-            s3.innerHTML = "";
-            if (s1.value == "ANDAMAN AND NICOBAR ISLANDS") {
-                var optionArray1 = ["|"];
-            } else if (s1.value == "ANDHRA PRADESH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "araku|Araku", "srikakulam|Srikakulam", "vizianagaram|Vizianagaram",
-                        "visakhapatnam|Visakhapatnam",
-                        "anakapalli|Anakapalli", "kakinada|Kakinada", "Amalapuram|Amalapuram",
-                        "Rajahmundry|Rajahmundry",
-                        "Narasapuram|Narasapuram", "Eluru|Eluru", "Machilipatnam|Machilipatnam",
-                        "Vijayawada|Vijayawada",
-                        "Guntur|Guntur", "Narasaraopet|Narasaraopet", "Bapatla|Bapatla", "Ongole|Ongole",
-                        "Nandyal|Nandyal",
-                        "Kurnool|Kurnool", "Anantapur|Anantapur", "Hindupur|Hindupur", "Kadapa|Kadapa",
-                        "Nellore|Nellore",
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Tirupati|Tirupati",
-                        "Rajampet|Rajampet", "Chittoor|Chittoor"
-                    ]
-                }
-            } else if (s1.value == "ARUNACHAL PRADESH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-
-            } else if (s1.value == "ASSAM") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Karimganj|Karimganj", "Silchar|Silchar",
-                        "Autonomous District|Autonomous District", "Dhubri|Dhubri",
-                        "Kokrajhar|Kokrajhar", "Barpeta|Barpeta", "auhati|Gauhati", "Mangaldoi|Mangaldoi",
-                        "Tezpur|Tezpur",
-                        "Nowgong|Nowgong", "Kaliabor|Kaliabor", "Jorhat|Jorhat", "Dibrugarh|Dibrugarh",
-                        "Lakhimpur|Lakhimpur"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "BIHAR") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Valmiki Nagar|Valmiki Nagar", "Paschim Champaran|Paschim Champaran",
-                        "Purvi Champaran|Purvi Champaran", "Sheohar|Sheohar", "Sitamarhi|Sitamarhi",
-                        "Madhubani|Madhubani",
-                        "Jhanjharpur|Jhanjharpur", "Supaul|Supaul", "Araria|Araria", "Kishanganj|Kishanganj",
-                        "Katihar|Katihar", "Purnia|Purnia", "Madhepura|Madhepura", "Darbhanga|Darbhanga",
-                        "Muzaffarpur|Muzaffarpur", "Vaishali|Vaishali", "Gopalganj|Gopalganj", "Siwan|Siwan",
-                        "Maharajganj|Maharajganj",
-                        "Saran|Saran",
-                        "Hajipur|Hajipur",
-                        "Ujiarpur|Ujiarpur",
-                        "Samastipur|Samastipur",
-                        "Begusarai|Begusarai",
-                        "Khagaria|Khagaria",
-                        "Bhagalpur|Bhagalpur",
-                        "Banka|Banka",
-                        "Munger|Munger",
-                        "Nalanda|Nalanda",
-                        "Patna Sahib|Patna Sahib",
-                        "Pataliputra|Pataliputra",
-                        "Arrah|Arrah",
-                        "Buxar|Buxar",
-                        "Sasaram|Sasaram",
-                        "Karakat|Karakat",
-                        "Jahanabad|Jahanabad",
-                        "Aurangabad|Aurangabad",
-                        "Gaya|Gaya",
-                        "Nawada|Nawada",
-                        "Jamui|Jamui"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "CHANDIGARH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Sarguja|Sarguja", "Raigarh|Raigarh", "Janjgir|Janjgir", "Korba|Korba",
-                        "Bilaspur|Bilaspur",
-                        "Rajnandgaon|Rajnandgaon", "Durg|Durg", "Raipur|Raipur", "Mahasamund|Mahasamund",
-                        "Bastar|Bastar", "Kanker|Kanker"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-
-            } else if (s1.value == "CHHATTISGARH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "DADRA &amp; NAGAR HAVELI") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "DAMAN &amp; DIU") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "GOA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "North Goa|North Goa", "South Goa|South Goa"];
-                } else {
-                    var optionArray1 = ["|", "Tirupati|Tirupati",
-                        "Rajampet|Rajampet", "Chittoor|Chittoor"
-                    ]
-                }
-
-            } else if (s1.value == "GUJARAT") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Kutch|Kutch", "Banaskantha|Banaskantha", "Patan|Patan", "Mahesana|Mahesana",
-                        "Sabarkantha|Sabarkantha", "Gandhinagar|Gandhinagar", "Ahmedabad East|Ahmedabad East",
-                        "Ahmedabad West|Ahmedabad West", "Surendranagar|Surendranagar", "Rajkot|Rajkot",
-                        "Porbandar|Porbandar", "Jamnagar|Jamnagar", "Junagadh|Junagadh", "Amreli|Amreli",
-                        "Bhavnagar|Bhavnagar", "Anand|Anand", "Kheda|Kheda", "Panchmahal|Panchmahal",
-                        "Dahod|Dahod", "Vadodara|Vadodara", "Chhota Udaipur|Chhota Udaipur", "Bharuch|Bharuch",
-                        "Bardoli|Bardoli", "Surat|Surat", "Navsari|Navsari", "Valsad|Valsad"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "HARYANA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Ambala|Ambala", "Kurukshetra|Kurukshetra", "Sirsa|Sirsa", "Hissar|Hissar",
-                        "Karnal|Karnal",
-                        "Sonipat|Sonipat", "Rohtak|Rohtak", "Bhiwani–Mahendragarh|Bhiwani–Mahendragarh",
-                        "Gurgaon|Gurgaon", "Faridabad|Faridabad"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "HIMACHAL PRADESH") {
-                if (s2.value == "Parliamentary") {
-
-                    var optionArray1 = ["|", "Kangra|Kangra",
-                        "Mandi|Mandi",
-                        "Hamirpur|Hamirpur",
-                        "Shimla|Shimla"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "JAMMU & KASHMIR") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-                var optionArray1 = ["|", ];
-            } else if (s1.value == "JHARKHAND") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-                var optionArray1 = ["|", ];
-            } else if (s1.value == "KARNATAKA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-
-            } else if (s1.value == "KERALA") {
-                if (s2.value == "Parliamentary") {
-
-                    var optionArray1 = ["|", "Kasaragod|Kasaragod", "Kannur|Kannur", "Vatakara|Vatakara", "Wayanad|Wayanad",
-                        "Kozhikode|Kozhikode",
-                        "Malappuram|Malappuram", "Ponnani|Ponnani", "Palakkad|Palakkad", "Alathur|Alathur",
-                        "Thrissur|Thrissur",
-                        "Chalakudy|Chalakudy", "Ernakulam|Ernakulam", "Idukki|Idukki", "Kottayam|Kottayam",
-                        "Alappuzha|Alappuzha", "Mavelikara|Mavelikara", "Pathanamthitta|Pathanamthitta",
-                        "Kollam|Kollam",
-                        "Attingal|Attingal", "Thiruvananthapuram|Thiruvananthapuram"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "LAKSHADWEEP") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "MADHYA PRADESH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "MAHARASHTRA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "MANIPUR") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Inner Manipur|Inner Manipur", "Outer Manipur|Outer Manipur"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "MEGHALAYA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Shillong|Shillong", "Tura|Tura"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "MIZORAM") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "MIZORAM|MIZORAM"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "NAGALAND") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "NAGALAND|NAGALAND"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "NCT OF DELHI ") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "ODISHA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "PUDUCHERRY") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "PUNJAB") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "RAJASTHAN") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "SIKKIM") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "SIKKIM|SIKKIM"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "TAMIL NADU") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "TELANGANA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "TRIPURA") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Tripura West|Tripura West", "Tripura East|Tripura East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "UTTAR PRADESH") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "UTTARAKHAND") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Tehri Garhwal|Tehri Garhwal",
-                        "Garhwal|Garhwal",
-                        "Almora|Almora",
-                        "Nainital–Udhamsingh Nagar|Nainital–Udhamsingh Nagar",
-                        "Haridwar|Haridwar"
-                    ];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
-            } else if (s1.value == "WEST BENGAL") {
-                if (s2.value == "Parliamentary") {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                } else {
-                    var optionArray1 = ["|", "Arunachal West|Arunachal West", "Arunachal East|Arunachal East"];
-                }
+        function getConstituencies(countyID) {
+            if (countyID == "") {
+                document.getElementById("constituency").innerHTML = "<option value=''>-- SELECT COUNTY --</option>";
+                return;
             }
-            for (var option in optionArray1) {
-                var pair = optionArray1[option].split("|");
-                var newOption = document.createElement("option");
-                newOption.value = pair[0];
-                newOption.innerHTML = pair[1];
-                s3.options.add(newOption);
-            }
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "/data/get_constituencies/" + countyID, true);
+            ajax.onload = function() {
+                var list = JSON.parse(this.responseText);
+                var option = "";
+                option += "<option value=''>-- CONSTITUENCY --</option>";
+                for (var i = 0; i < list.length; i++) {
+                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['constituency'] +
+                        "</option>";
+                }
+                document.getElementById("constituency").innerHTML = option;
+            };
+            ajax.send();
         }
     </script>
 
@@ -358,71 +62,46 @@
                                 Voter
                             </header>
                             <div class="panel-body">
-                                <form class="form-horizontal" method="post" action="view_voter"
+                                <form class="form-horizontal" method="post" action="/data/view_voters"
                                     id="CandidateCustomFilter">
-                                    {% csrf_token %}
+                                    @csrf
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">State/UT</label>
+                                        <label class="col-sm-2 control-label">Province</label>
                                         <div class="col-sm-10">
-                                            <select id="states" name="states" class="form-control"
-                                                onchange="st(this.id,'constituency1')" style="width:80%;">
-                                                <option value="" selected="selected">State/UT</option>
-                                                <option value="ANDAMAN AND NICOBAR ISLANDS">ANDAMAN AND NICOBAR ISLANDS
-                                                </option>
-                                                <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
-                                                <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH</option>
-                                                <option value="ASSAM">ASSAM</option>
-                                                <option value="BIHAR">BIHAR</option>
-                                                <option value="CHANDIGARH">CHANDIGARH</option>
-                                                <option value="CHHATTISGARH">CHHATTISGARH</option>
-                                                <option value="DADRA &amp; NAGAR HAVELI">DADRA &amp; NAGAR HAVELI
-                                                </option>
-                                                <option value="DAMAN &amp; DIU">DAMAN &amp; DIU</option>
-                                                <option value="GOA">GOA</option>
-                                                <option value="GUJARAT">GUJARAT</option>
-                                                <option value="HARYANA">HARYANA</option>
-                                                <option value="HIMACHAL PRADESH">HIMACHAL PRADESH</option>
-                                                <option value="JAMMU & KASHMIR">JAMMU & KASHMIR</option>
-                                                <option value="JHARKHAND">JHARKHAND</option>
-                                                <option value="KARNATAKA">KARNATAKA</option>
-                                                <option value="KERALA">KERALA</option>
-                                                <option value="LAKSHADWEEP">LAKSHADWEEP</option>
-                                                <option value="MADHYA PRADESH">MADHYA PRADESH</option>
-                                                <option value="MAHARASHTRA">MAHARASHTRA</option>
-                                                <option value="MANIPUR">MANIPUR</option>
-                                                <option value="MEGHALAYA">MEGHALAYA</option>
-                                                <option value="MIZORAM">MIZORAM</option>
-                                                <option value="NAGALAND">NAGALAND</option>
-                                                <option value="NCT OF DELHI">NCT OF DELHI </option>
-                                                <option value="ODISHA">ODISHA</option>
-                                                <option value="PUDUCHERRY">PUDUCHERRY</option>
-                                                <option value="PUNJAB">PUNJAB</option>
-                                                <option value="RAJASTHAN">RAJASTHAN</option>
-                                                <option value="SIKKIM">SIKKIM</option>
-                                                <option value="TAMIL NADU">TAMIL NADU</option>
-                                                <option value="TELANGANA">TELANGANA</option>
-                                                <option value="TRIPURA">TRIPURA</option>
-                                                <option value="UTTAR PRADESH">UTTAR PRADESH</option>
-                                                <option value="UTTARAKHAND">UTTARAKHAND</option>
-                                                <option value="WEST BENGAL">WEST BENGAL</option>
+                                            <select name="province" id="province" class="form-control round-input"
+                                                style="width:80%;" required onchange="getCounties(this.value)">
                                             </select>
                                         </div>
+                                        <script>
+                                            // Fetch the database for the provinces using ajax
+                                            var ajax = new XMLHttpRequest();
+                                            ajax.open("GET", "/data/get_provinces", true);
+                                            ajax.onload = function() {
+                                                var list = JSON.parse(this.responseText);
+                                                var option = "<option value=''>-- PROVINCE --</option>";
+                                                for (var i = 0; i < list.length; i++) {
+                                                    option += "<option value='" + list[i]['id'] + "'>" + list[i]['province'] + "</option>";
+                                                }
+                                                document.getElementById("province").innerHTML = option;
+                                            };
+                                            ajax.send();
+                                        </script>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Constituency Type</label>
+                                        <label class="col-sm-2 control-label">County</label>
                                         <div class="col-sm-10">
-                                            <select name="constituency1" class="form-control" id="constituency1"
-                                                onchange="st2(this.id,'Constituency2')" style="width:80%;">
-                                                <option value="" selected>Constituency Type</option>
+                                            <select name="county" class="form-control round-input" style="width:80%;"
+                                                required id="county" onchange="getConstituencies(this.value)">
+                                                <option value="">-- SELECT PROVINCE --</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Constituency</label>
                                         <div class="col-sm-10">
-                                            <select name="constituency2" class="form-control" id="Constituency2"
-                                                style="width:80%;">
-                                                <option value="" selected>Constituency</option>
+                                            <select name="constituency_id" class="form-control round-input"
+                                                style="width:80%;" id="constituency">
+                                                <option value="">-- SELECT COUNTY --</option>
                                             </select>
                                         </div>
                                     </div>
