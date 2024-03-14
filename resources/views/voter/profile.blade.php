@@ -54,16 +54,16 @@
                                 <!--style="background-image: url('{{ asset('images/fr.jpg') }}')"-->
                                 <div class="col-lg-2 col-sm-2">
                                     <div class="follow-ava">
-                                        <img src="{{ asset('voter_image.url') }}" alt="image"
+                                        <img src="{{ asset($user->dp ? $user->dp : '/images/user.png') }}" alt="image"
                                             style="height: 100px; width: 100px;">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-sm-4 follow-info">
-                                    <p><i class="icon_id-2"></i>{{ 'voterid_no' }}</p>
-                                    <p><i class="icon_profile"></i>{{ 'name' }} {{ 'father_name' }}</p>
-                                    <p><i class="icon_phone"></i>+254{{ 'mobile_no' }}</p>
+                                    <p><i class="icon_id-2"></i> {{ $user->id_number }}</p>
+                                    <p><i class="icon_profile"></i> {{ $user->first_name }} {{ $user->last_name }}</p>
+                                    <p><i class="icon_phone"></i> {{ $user->phone }}</p>
                                     <h6>
-                                        <span><i class="icon_calendar"></i>{{ 'dateofbirth' }}</span>
+                                        <span><i class="icon_calendar"></i> {{ $user->dob }}</span>
                                     </h6>
                                 </div>
 
@@ -93,41 +93,48 @@
                                                 <h1>Profile</h1>
                                                 <div class="row" style="color:black;">
                                                     <div class="bio-row">
-                                                        <p><span>Voter ID :</span> <label
-                                                                name="v_id">{{ 'voterid_no' }}</label></p>
+                                                        <p><span>Voter ID : </span> <label
+                                                                name="v_id">{{ $user->id_number }}</label>
+                                                        </p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>Name : </span> {{ 'name' }}</p>
+                                                        <p><span>Name : </span> {{ auth()->user()->first_name }}
+                                                            {{ $user->last_name }}</p>
+                                                    </div>
+                                                    {{-- <div class="bio-row">
+                                                        <p><span>Father Name : </span>{{ 'father_name' }}</p>
+                                                    </div> --}}
+                                                    <div class="bio-row">
+                                                        <p><span>Gender : </span>
+                                                            {{ $user->gender_id == 1 ? 'Male' : 'Female' }}
+                                                        </p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>Father Name :</span>{{ 'father_name' }}</p>
+                                                        <p><span>Date of Birth : </span>{{ $user->dob }}</p>
+                                                    </div>
+                                                    {{-- <div class="bio-row">
+                                                        <p><span>Address : </span> {{ $user->gender_id }}</p>
+                                                    </div> --}}
+                                                    <div class="bio-row">
+                                                        <p><span>Phone: </span>{{ $user->phone }}</p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>Gender :</span> {{ 'gender' }}</p>
+                                                        <p><span>Email : </span>{{ $user->email }}</p>
                                                     </div>
-                                                    <div class="bio-row">
-                                                        <p><span>Date of Birth : </span>{{ 'dateofbirth' }}</p>
-                                                    </div>
-                                                    <div class="bio-row">
-                                                        <p><span>Address : </span> {{ 'address' }}</p>
-                                                    </div>
-                                                    <div class="bio-row">
-                                                        <p><span>Mobile Number:</span>+254{{ 'mobile_no' }}</p>
-                                                    </div>
-                                                    <div class="bio-row">
-                                                        <p><span>Email : </span>{{ 'email | has_data' }}</p>
-                                                    </div>
-                                                    <div class="bio-row">
+                                                    {{-- <div class="bio-row">
                                                         <p><span>Pincode : </span>{{ 'pincode' }}</p>
+                                                    </div> --}}
+                                                    <div class="bio-row">
+                                                        <p><span>Province : </span>{{ $user->province }}</p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>Province : </span>{{ 'province' }}</p>
+                                                        <p><span>County : </span> {{ $user->county }}</p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>County : </span> {{ 'county' }}</p>
+                                                        <p><span>Constituency : </span>{{ $user->constituency }}</p>
                                                     </div>
                                                     <div class="bio-row">
-                                                        <p><span>Constituency : </span>{{ 'constituency' }}</p>
+                                                        <p><span>Ward : </span>{{ $user->ward }}</p>
                                                     </div>
                                                 </div>
                                             </div>

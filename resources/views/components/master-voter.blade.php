@@ -111,7 +111,7 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown" href="#" style="a:focus color:#797979">
                             <span class="profile-ava">
-                                <img alt="Image not found" src="{{ 'image.jpg' }}" height="30px" width="30px">
+                                <img alt="Image not found" src="{{ asset(auth()->user()->dp ? auth()->user()->dp : '/images/user.png') }}" height="30px" width="30px">
                             </span>
                             <span class="username">{{ auth()->user()->first_name }}
                                 {{ auth()->user()->last_name }}</span>
