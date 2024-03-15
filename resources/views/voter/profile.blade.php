@@ -54,7 +54,7 @@
                                 <!--style="background-image: url('{{ asset('images/fr.jpg') }}')"-->
                                 <div class="col-lg-2 col-sm-2">
                                     <div class="follow-ava">
-                                        <img src="{{ asset($user->dp ? $user->dp : '/images/user.png') }}" alt="image"
+                                        <img src="{{ getUserDP() }}" alt="image"
                                             style="height: 100px; width: 100px;">
                                     </div>
                                 </div>

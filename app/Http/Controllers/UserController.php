@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Str;
+
 class UserController extends Controller
 {
     public function store(Request $request)
@@ -32,19 +34,68 @@ class UserController extends Controller
             // "account_type_id" => [Rule::in([0, 1, 2])],
             "dp" => ["image", "mimes:jpeg,png,jpg,gif,svg", "max:6144"],
         ]);
-        // make dp not required and use a default avatar img
+        // make dp required and use a default avatar img
         $dpFile = $request->file("dp");
         $imagePath = $dpFile ? $dpFile->store("images/dp", "public") : "/images/user.png";
         $formFields["dp"] = $imagePath;
+
+        // store middle name if available
+        if ($request->has("middle_name")) {
+            $formFields["middle_name"] = $request->middle_name;
+        }
+
+        // create a remember token
+        $formFields["remember_token"] = Str::random(10);
 
         // hash the password
         $formFields["password"] = bcrypt($formFields["password"]);
         // dd($formFields);
         // create the user
-        $user = User::create($formFields);
+        User::create($formFields);
 
         // redirect back to adding new user
-        return back("/")->with("message", "Voter added successfully!");
+        return back()->with("message", "Voter added successfully!");
+    }
+
+    public function update(Request $request)
+    {
+        $idNumber = $request->input("id_number");
+
+        $formFields = $request->validate([
+            // assumption is that user cannot change their names
+            "constituency_id" => ["required"],
+            "ward" => ["required"],
+            // TODO: check before update if the email and phone in database
+            "email" => ["required",],
+            "phone" => ["required"],
+            "id_number"=> ["required"],
+            "user_type_id" => ["required", Rule::in([0, 1, 2])],
+
+            // password can only be updated from voters profile
+
+            // dp can be null if it was not updated
+            // "dp" => ["image", "mimes:jpeg,png,jpg,gif,svg", "max:6144"],
+        ]);
+
+        // make dp required and use a default avatar img
+        $dpFile = $request->file("dp");
+        if (!is_null($dpFile)) {
+            $imagePath = $dpFile->store("images/dp", "public");
+            $formFields["dp"] = $imagePath;
+        }
+
+        // store middle name if available
+        if ($request->has("middle_name")) {
+            $formFields["middle_name"] = $request->middle_name;
+        }
+
+        // create a remember token
+        $formFields["remember_token"] = Str::random(10);
+
+        User::where("id_number", "=", $idNumber)->update($formFields);
+
+        // redirect back to finding new user
+        return back()->with("message", "Voter updated successfully!");
     }
 
     // logout the user

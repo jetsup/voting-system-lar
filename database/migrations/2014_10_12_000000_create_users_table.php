@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId("user_type_id")->default(2)->nullable()->constrained("user_types")->nullOnDelete()->cascadeOnUpdate();
             $table->timestamp("email_verified_at")->nullable();
             $table->string("password");
-            $table->string("dp")->nullable()->default(null);
+            $table->string("dp")->nullable()->default("/images/user.png");
             $table->rememberToken();
             $table->timestamps();
         });

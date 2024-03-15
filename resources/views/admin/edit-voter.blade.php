@@ -1,4 +1,3 @@
- {% extends 'admin/master.html' %}
  <x-master-admin>
 
      <body>
@@ -21,12 +20,12 @@
                                  Voter
                              </header>
                              <div class="panel-body">
-                                 <form class="form-horizontal " method="POST" action="edit-voter">
+                                 <form class="form-horizontal " method="POST" action="/edit-voter">
                                      @csrf
                                      <div class="form-group">
                                          <label class="col-sm-2 control-label">Voter ID</label>
                                          <div class="col-sm-10">
-                                             <input type="text" class="form-control round-input" name="vid"
+                                             <input type="text" class="form-control round-input" name="id_number"
                                                  required maxlength="8" pattern="^[0-9]{6,8}$"
                                                  onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
                         if(this.checkValidity()) form.pwd2.pattern = RegExp.escape(this.value);"

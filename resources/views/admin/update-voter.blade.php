@@ -16,6 +16,11 @@
                     option += "<option value='" + list[i]['id'] + "'>" + list[i]['county'] + "</option>";
                 }
                 document.getElementById("county").innerHTML = option;
+
+                // set the county based on the value from the database
+                let selector = document.getElementById("county");
+                selector.value = "{{ $voter->county_id }}"
+                getConstituencies(selector.value);
             };
             ajax.send();
         }
@@ -36,6 +41,10 @@
                         "</option>";
                 }
                 document.getElementById("constituency").innerHTML = option;
+
+                // set the constituency based on the value from the database
+                let selector = document.getElementById("constituency");
+                selector.value = "{{ $voter->constituency_id }}"
             };
             ajax.send();
         }
@@ -53,7 +62,7 @@
                         <ol class="breadcrumb">
                             <li><i class="fa fa-home"></i>Home</li>
                             <li><i class="icon_document_alt"></i>Voter</li>
-                            <li><i class="fa fa-file-text-o"></i>Add Voter</li>
+                            <li><i class="fa fa-pencil"></i>Update Voter</li>
                         </ol>
                     </div>
                 </div>
@@ -65,14 +74,13 @@
                             </header>
                             <div class="panel-body">
                                 <form class="form-horizontal" method="post" enctype="multipart/form-data"
-                                    action="/add_voter">
+                                    action="/update-voter">
                                     @csrf
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Voter Image</label>
                                         <div class="col-lg-2 col-sm-2">
                                             <div class="follow-ava2" style="position: relative; left:50px;">
-                                                <img id="output" src="{{ asset('images/user2.png') }}"
-                                                    alt="Upload Image"
+                                                <img id="output" src="{{ getUserDP() }}" alt="Upload Image"
                                                     style="max-height:150px; max-width: 150px; min-width: 150px; min-height: 150px;
                                 border-top-left-radius: 50% 50%;
                                     border-top-right-radius: 50% 50%;
@@ -81,7 +89,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-10">
-                                            <input type="file" required accept="image/*" name="dp"
+                                            <input type="file" accept="image/*" name="dp"
                                                 onchange="loadfile(event)" style="position: relative; left: 90px;">
                                             <script>
                                                 var loadfile = function(event) {
@@ -102,7 +110,7 @@
                                                 onchange="this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
                         if(this.checkValidity()) form.pwd2.pattern = RegExp.escape(this.value);"
                                                 title="Only A-Z and 0-9 allowed minimum 10 characters"
-                                                style="width:80%;">
+                                                style="width:80%;" value="{{ $voter->id_number }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -111,7 +119,7 @@
                                             <input type="text" name="first_name" minlength="3" required
                                                 class="form-control round-input" oninput="this.setCustomValidity('')"
                                                 oninvalid="this.setCustomValidity('Enter First Name')"
-                                                style="width:80%;">
+                                                style="width:80%;" value="{{ $voter->first_name }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -119,8 +127,8 @@
                                         <div class="col-sm-10">
                                             <input type="text" required name="last_name" minlength="3"
                                                 class="form-control round-input" oninput="this.setCustomValidity('')"
-                                                oninvalid="this.setCustomValidity('Enter Last Name')"
-                                                style="width:80%;">
+                                                oninvalid="this.setCustomValidity('Enter Last Name')" style="width:80%;"
+                                                value="{{ $voter->last_name }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -129,18 +137,23 @@
                                             <input type="text" name="middle_name" minlength="3"
                                                 class="form-control round-input" oninput="this.setCustomValidity('')"
                                                 oninvalid="this.setCustomValidity('Enter Middle Name')"
-                                                style="width:80%;">
+                                                style="width:80%;" value="{{ $voter->middle_name }}" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Gender</label>
                                         <div class="col-sm-10">
-                                            <select name="gender_id" class="form-control round-input" required
-                                                style="width:80%;">
+                                            <select name="gender_id" id="gender_id" class="form-control round-input"
+                                                required style="width:80%;" disabled>
                                                 <option selected value="">Gender</option>
                                                 <option value="1">Male</option>
                                                 <option value="2">Female</option>
                                             </select>
+                                            <script>
+                                                // set the gender based on the value from the database
+                                                let selector = document.getElementById("gender_id");
+                                                selector.value = "{{ $voter->gender_id }}"
+                                            </script>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -148,7 +161,7 @@
                                         <div class="col-sm-10">
                                             <input type="date" required name="dob" id="dob"
                                                 placeholder="For example: 02/04/1998" style="width:80%;"
-                                                class="form-control round-input">
+                                                class="form-control round-input" value="{{ $voter->dob }}" disabled>
                                             <span class="error" id="lblError"></span>
                                         </div>
                                     </div>
@@ -165,7 +178,8 @@
                                                 oninput="this.setCustomValidity('')" style="width:80%;"
                                                 oninvalid="this.setCustomValidity('Enter your Number')" required
                                                 maxlength="10" name="phone" id="phone"
-                                                placeholder="07xxxxxxxx/01xxxxxxxx" class="form-control round-input">
+                                                placeholder="07xxxxxxxx/01xxxxxxxx" class="form-control round-input"
+                                                value="{{ $voter->phone }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -174,14 +188,14 @@
                                             <input type="email" oninput="this.setCustomValidity('')"
                                                 style="width:80%;"
                                                 oninvalid="this.setCustomValidity('Enter your Email address')" required
-                                                name="email" id="email"
-                                                placeholder="someone@example.com" class="form-control round-input">
+                                                name="email" id="email" placeholder="someone@example.com"
+                                                class="form-control round-input" value="{{ $voter->email }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Province</label>
                                         <div class="col-sm-10">
-                                            <select name="province" id="province" class="form-control round-input"
+                                            <select name="" id="province" class="form-control round-input"
                                                 style="width:80%;" required onchange="getCounties(this.value)">
                                             </select>
                                         </div>
@@ -196,6 +210,10 @@
                                                     option += "<option value='" + list[i]['id'] + "'>" + list[i]['province'] + "</option>";
                                                 }
                                                 document.getElementById("province").innerHTML = option;
+                                                // set the province based on the value from the database
+                                                let selector = document.getElementById("province");
+                                                selector.value = "{{ $voter->province_id }}"
+                                                getCounties(selector.value);
                                             };
                                             ajax.send();
                                         </script>
@@ -203,7 +221,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">County</label>
                                         <div class="col-sm-10">
-                                            <select name="county" class="form-control round-input"
+                                            <select name="" class="form-control round-input"
                                                 style="width:80%;" required id="county"
                                                 onchange="getConstituencies(this.value)">
                                                 <option value="">-- SELECT PROVINCE --</option>
@@ -226,7 +244,7 @@
                                                 style="width:80%;"
                                                 oninvalid="this.setCustomValidity('Provide your Ward')" required
                                                 minlength="4" name="ward" id="ward"
-                                                placeholder="eg. Starehe" class="form-control round-input">
+                                                placeholder="eg. Starehe" class="form-control round-input" value="{{$voter->ward}}">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -237,27 +255,19 @@
                                                 <option value="2">Voter</option>
                                                 <option value="1">Admin</option>
                                             </select>
+
+                                            <script>
+                                                // set the user type based on the value from the database
+                                                let userType = document.getElementsByName("user_type_id")[0];
+                                                userType.value = "{{ $voter->user_type_id }}"
+                                            </script>
                                         </div>
                                     </div>
-                                    <!-- TODO: This will actually change to password -->
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Password</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" name="password" required minlength="8"
-                                                class="form-control round-input" style="width:80%;">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Password Confirmation</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" name="password_confirmation" required
-                                                minlength="8" class="form-control round-input" style="width:80%;">
-                                        </div>
-                                    </div>
+
                                     <div class="form-group">
                                         <div class="col-lg-offset-2 col-lg-10">
                                             <button class="btn btn-primary" type="submit">Submit</button>
-                                            <button class="btn btn-default" type="reset">Reset</button>
+                                            <button class="btn btn-default" type="reset">Back</button>
                                         </div>
                                     </div>
                                     <div class="form-group">

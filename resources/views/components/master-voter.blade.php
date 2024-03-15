@@ -111,7 +111,7 @@
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown" href="#" style="a:focus color:#797979">
                             <span class="profile-ava">
-                                <img alt="Image not found" src="{{ asset(auth()->user()->dp ? auth()->user()->dp : '/images/user.png') }}" height="30px" width="30px">
+                                <img alt="Image not found" src="{{ getUserDP() }}" height="30px" width="30px">
                             </span>
                             <span class="username">{{ auth()->user()->first_name }}
                                 {{ auth()->user()->last_name }}</span>
@@ -121,7 +121,7 @@
                             <div class="log-arrow-up">
                             </div>
                             <li class="eborder-top">
-                                <a href="vprofile"><i class="icon_profile"></i> Profile</a>
+                                <a href="/profile"><i class="icon_profile"></i> Profile</a>
                             </li>
                             <li>
                                 <a href="vchangepassword"><i class="fa fa-key"></i>Change password</a>
