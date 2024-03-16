@@ -108,7 +108,7 @@
 
     <body>
         <!-- container section start -->
-        <section id="main-content" style=" margin-right:110px;">
+        <section id="main-content" style=" margin-right:120px;">
             <section class="wrapper">
                 <div class="row">
                     <div class="col-lg-12">

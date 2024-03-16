@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SystemUserController;
@@ -60,11 +61,17 @@ Route::get("add-candidate", function () {
     return view("admin/add-candidate");
 })->middleware("auth");
 
-Route::post("add-candidate", [ElectionController::class,"addCandidate"])->middleware("auth");
+Route::post("add-candidate", [CandidateController::class,"addCandidate"])->middleware("auth");
 
 Route::get("edit-candidate", function () {
     return view("admin/edit-candidate");
 })->middleware("auth");
+
+Route::post("edit-candidate", [CandidateController::class,"editCandidate"])->middleware("auth");
+
+Route::post("update-candidate", [CandidateController::class, "updateCandidate"])->middleware("auth");
+
+Route::get("delete-candidate", [CandidateController::class, "deleteCandidate"])->middleware("auth");
 
 Route::get("view-candidate", function () {
     if (auth()->user()->user_type_id == 1) {
@@ -73,6 +80,8 @@ Route::get("view-candidate", function () {
         return view("voter/view-candidate");
     }
 })->middleware("auth");
+
+Route::get("data/view-candidates/{queryTypeID}/{placeID}", [CandidateController::class, "getCandidates"])->middleware("auth");
 // End Admin candidate
 
 // Admin election
@@ -178,8 +187,6 @@ Route::post("add_voter", [UserController::class, "store"])->middleware("auth");
 Route::get("data/get_provinces", [LocationController::class, "get_provinces"]);
 Route::get("data/get_counties/{provinceID}", [LocationController::class, "get_counties"]);
 Route::get("data/get_constituencies/{countyID}", [LocationController::class, "get_constituencies"]);
-
-Route::get("data/view_voters", [SystemUserController::class, "getVotersByLoc"])->middleware("auth");
 
 Route::get("data/get-elections", [ElectionController::class, "getElections"])->middleware("auth");
 Route::get("data/get-parties", [ElectionController::class, "getParties"])->middleware("auth");
