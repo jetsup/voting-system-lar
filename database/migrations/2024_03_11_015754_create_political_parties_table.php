@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create("political_parties", function (Blueprint $table) {
             $table->id();
             $table->string("party")->unique();
-            $table->foreignId("party_leader_id")->nullable()->constrained("users")->nullOnDelete()->cascadeOnUpdate();
-            $table->string("party_image")->nullable()->default(null);
+            $table->string("slogan")->nullable(false);
+            $table->foreignId("party_leader")->nullable()->constrained("users")->nullOnDelete()->cascadeOnUpdate();
+            $table->string("party_image")->nullable()->default("images/elections/political_parties.jpg");
+            // election_id is necessary so that we don't fetch parties of the past that are not contesting
+            $table->foreignId("election_id")->nullable()->default(null)->constrained("elections")->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

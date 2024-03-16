@@ -20,7 +20,7 @@
                                 Candidate
                             </header>
                             <div class="panel-body">
-                                <form class="form-horizontal " method="POST" action="edit_candidate">
+                                <form class="form-horizontal " method="POST" action="/edit-candidate">
                                     @csrf
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Enter Candidate ID:</label>

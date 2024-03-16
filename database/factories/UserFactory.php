@@ -36,7 +36,6 @@ class UserFactory extends Factory
             "phone" => fake()->phoneNumber(),
             "email_verified_at" => fake()->dateTimeThisDecade("-3 year"),
             "password" => bcrypt("Voter123."),
-            "dp" => "user.png",
             'remember_token' => Str::random(10),
         ];
     }

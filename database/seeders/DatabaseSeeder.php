@@ -4,9 +4,17 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Constituencies;
+use App\Models\Counties;
+use App\Models\ElectionStatus;
+use App\Models\ElectionTypes;
 use App\Models\Genders;
+use App\Models\PoliticalParties;
+use App\Models\PoliticalPositions;
+use App\Models\Provinces;
 use App\Models\User;
 use App\Models\UserTypes;
+use Database\Factories\ElectionsFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     // set this variable to `false` if you don't want to add dummy data to the database
-    const GENERATE_DUMMY_DATA = false;
+    const GENERATE_DUMMY_DATA = true;
 
     /**
      * Seed the application's database.
@@ -33,6 +41,7 @@ class DatabaseSeeder extends Seeder
                 ('WESTERN'),
                 ('NYANZA'),
                 ('NAIROBI')");
+        Provinces::where("created_at")->update(["created_at" => now(), "updated_at" => now()]);
         $this->command->info('Creating Counties.................');
         DB::statement("
             INSERT IGNORE INTO counties(county, province_id) VALUES
@@ -83,6 +92,7 @@ class DatabaseSeeder extends Seeder
                 ('KISII', 7),
                 ('NYAMIRA', 7),
                 ('NAIROBI', 8)");
+        Counties::where("created_at")->update(["created_at" => now(), "updated_at" => now()]);
         $this->command->info('Creating Constituencies.................');
         DB::statement("
             INSERT IGNORE INTO constituencies(constituency, county_id) VALUES
@@ -142,6 +152,7 @@ class DatabaseSeeder extends Seeder
                 --  Nairobi
                 ('WESTLANDS', 47), ('DAGORETI NORTH', 47), ('DAGORETI SOUTH', 47), ('LANG\'ATA', 47), ('KIBRA', 47), ('ROYSAMBU', 47), ('KASARANI', 47), ('RUARAKA', 47), ('EMBAKASI SOUTH', 47), ('EMBAKASI NORTH', 47), ('EMBAKASI CENTRAL', 47), ('EMBAKASI EAST', 47), ('EMBAKASI WEST', 47), ('MAKADARA', 47), ('KAMUKUNJI', 47), ('STAREHE', 47), ('MATHARE', 47)
             ");
+        Constituencies::where("created_at")->update(["created_at" => now(), "updated_at" => now()]);
         // Create genders
         $this->command->info('Creating Genders.................');
         Genders::create([
@@ -172,14 +183,14 @@ class DatabaseSeeder extends Seeder
             "phone" => "0700000000",
             "email" => "admin@account.com",
             "dob" => "2000-10-23",
-            "constituency_id" =>123,
+            "constituency_id" => 123,
             "ward" => "KASARANI",
         ]);
         // Create a normal user
         User::create([
             "first_name" => "Voter",
             "last_name" => "User",
-            "id_number"=>1000001,
+            "id_number" => 1000001,
             "password" => bcrypt("Voter123."),
             "gender_id" => 2,
             "phone" => "0711111111",
@@ -191,7 +202,39 @@ class DatabaseSeeder extends Seeder
         // Create Dummy Users
         if (self::GENERATE_DUMMY_DATA) {
             $this->command->info('Creating Dummy Users.................');
-            UserFactory::new()->count(50)->create();
+            UserFactory::new()->count(20)->create();
+        }
+
+        // Create political positions
+        $this->command->info('Creating Political Positions.................');
+        PoliticalPositions::create(["position" => "PRESIDENT"]);
+        PoliticalPositions::create(["position" => "GOVERNOR"]);
+        PoliticalPositions::create(["position" => "SENETOR"]);
+        PoliticalPositions::create(["position" => "WOMEN REPRESENTATIVE"]);
+        PoliticalPositions::create(["position" => "MEMBER OF PARLIAMENT"]);
+        PoliticalPositions::create(["position" => "MEMBER OF COUNTY ASSEMBLY"]);
+
+        if (self::GENERATE_DUMMY_DATA) {
+            $this->command->info('Creating Political Parties.................');
+            PoliticalParties::create(["party" => "Party A", "slogan" => "Slogan A", "party_leader" => 1]);
+            PoliticalParties::create(["party" => "Party B", "slogan" => "Slogan B", "party_leader" => 1]);
+            PoliticalParties::create(["party" => "Party C", "slogan" => "Slogan C", "party_leader" => 1]);
+        }
+
+        $this->command->info("Creating Election Types.................");
+        ElectionTypes::create(["election_type" => "NATIONAL ELECTION"]);
+        ElectionTypes::create(["election_type" => "BI ELECTION"]);
+
+        $this->command->info("Creating Election Status.................");
+        ElectionStatus::create(["election_status" => "UPCOMING"]);
+        ElectionStatus::create(["election_status" => "ONGOING"]);
+        ElectionStatus::create(["election_status" => "POSTPONED"]);
+        ElectionStatus::create(["election_status" => "CANCELED"]);
+        ElectionStatus::create(["election_status" => "COMPLETED"]);
+
+        if(self::GENERATE_DUMMY_DATA){
+            $this->command->info("Creating Dummy Elections.................");
+            ElectionsFactory::new()->count(100)->create();
         }
     }
 }

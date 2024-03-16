@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId("user_id")->nullable()->constrained("users")->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId("vie_position_id")->nullable()->constrained("political_positions")->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId("party_id")->nullable()->constrained("political_parties")->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId("election_id")->nullable()->constrained("elections")->nullOnDelete()->cascadeOnUpdate();
             $table->string("affidavit")->nullable()->default(null);
             // votes counter
             $table->integer("total_votes")->default(0);

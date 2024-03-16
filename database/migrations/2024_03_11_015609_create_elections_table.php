@@ -21,9 +21,9 @@ return new class extends Migration
             */
             $table->foreignId("county_id")->nullable()->default(null)->constrained("counties")->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId("constituency_id")->nullable()->default(null)->constrained("constituencies")->nullOnDelete()->cascadeOnUpdate();
-            $table->dateTime("election_start_date");
-            $table->dateTime("election_ends_date");
-            $table->foreignId("election_status")->nullable()->constrained("election_status")->nullOnDelete()->cascadeOnUpdate();
+            $table->dateTime("start_date");
+            $table->dateTime("end_date");
+            $table->foreignId("election_status")->nullable()->constrained("election_statuses")->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

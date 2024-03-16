@@ -13,6 +13,7 @@ class Candidates extends Model
         "user_id",
         "vie_position_id",
         "party_id",
+        "election_id",
         "affidavit",
         "total_votes",
     ];

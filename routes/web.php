@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\UserController;
@@ -53,9 +54,13 @@ Route::get("data/view_voters/{queryTypeID}/{placeID}", [VoterController::class, 
 // End Admin voter
 
 // Admin candidate
+Route::get("search-voter/{idNumber}", [VoterController::class, "searchVoter"])->middleware("auth");
+
 Route::get("add-candidate", function () {
     return view("admin/add-candidate");
 })->middleware("auth");
+
+Route::post("add-candidate", [ElectionController::class,"addCandidate"])->middleware("auth");
 
 Route::get("edit-candidate", function () {
     return view("admin/edit-candidate");
@@ -175,4 +180,9 @@ Route::get("data/get_counties/{provinceID}", [LocationController::class, "get_co
 Route::get("data/get_constituencies/{countyID}", [LocationController::class, "get_constituencies"]);
 
 Route::get("data/view_voters", [SystemUserController::class, "getVotersByLoc"])->middleware("auth");
+
+Route::get("data/get-elections", [ElectionController::class, "getElections"])->middleware("auth");
+Route::get("data/get-parties", [ElectionController::class, "getParties"])->middleware("auth");
+Route::get("data/get-positions", [ElectionController::class, "getPositions"])->middleware("auth");
+Route::get("data/get-party-logo/{partyID}", [ElectionController::class, "getPartyLogo"])->middleware("auth");
 // End DataRequests
