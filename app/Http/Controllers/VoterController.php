@@ -27,23 +27,41 @@ class VoterController extends Controller
         }
     }
 
-    public function getVoters(Request $request)
+    public function getVoters(Request $request, $queryTypeID, $placeID)
     {
-        $provinceID = $request->input("province");
-        $countyID = $request->input("county_id");
 
-        if ($countyID) {
-            $constituencyID = $request->input("constituency");
-            if ($constituencyID) {
-                // all provided
-                $voters = User::where("constituency_id", "=", $constituencyID)->get(["dp", "id_number", "first_name", "last_name", "middle_name", "gender_id", "dob"]);
-            } else {
-                // only county and province
-                $constituenciesIDs = Constituencies::where("county_id", "=", $countyID)->get("id");
-                $voters = User::where("constituency_id", "IN", $constituenciesIDs)->get(["dp", "id_number", "first_name", "last_name", "middle_name", "gender_id", "dob"]);
-            }
-        } else {
-            // just province provided
+        if ($queryTypeID == 0) {
+            // province
+            $countiesIDs = Counties::where("province_id", "=", $placeID)->get("id")->pluck("id")->toArray();
+            $constituenciesIDs = Constituencies::whereIn("county_id", $countiesIDs)->get("id")->pluck("id")->toArray();
+            $voters = User::whereIn("constituency_id", $constituenciesIDs)->join("constituencies", function ($join) {
+                $join->on("users.constituency_id", "=", "constituencies.id");
+            })->leftJoin("counties", function ($join) {
+                $join->on("constituencies.county_id", "=", "counties.id");
+            })->leftJoin("provinces", function ($join) {
+                $join->on("counties.province_id", "=", "provinces.id");
+            })->select("users.*", "constituencies.constituency AS constituency", "counties.county AS county", "provinces.province AS province")->get();
+        } else if ($queryTypeID == 1) {
+            // county
+            $constituenciesIDs = Constituencies::where("county_id", "=", $placeID)->get("id")->pluck("id")->toArray();
+            $voters = User::whereIn("constituency_id", $constituenciesIDs)->join("constituencies", function ($join) {
+                $join->on("users.constituency_id", "=", "constituencies.id");
+            })->leftJoin("counties", function ($join) {
+                $join->on("constituencies.county_id", "=", "counties.id");
+            })->leftJoin("provinces", function ($join) {
+                $join->on("counties.province_id", "=", "provinces.id");
+            })->select("users.*", "constituencies.constituency AS constituency", "counties.county AS county", "provinces.province AS province")->get();
+        } else if ($queryTypeID == 2) {
+            // constituency
+            $voters = User::where("constituency_id", "=", $placeID)->join("constituencies", function ($join) {
+                $join->on("users.constituency_id", "=", "constituencies.id");
+            })->leftJoin("counties", function ($join) {
+                $join->on("constituencies.county_id", "=", "counties.id");
+            })->leftJoin("provinces", function ($join) {
+                $join->on("counties.province_id", "=", "provinces.id");
+            })->select("users.*", "constituencies.constituency AS constituency", "counties.county AS county", "provinces.province AS province")->get();
         }
+        // dd($voters);
+        return response()->json(["voters" => $voters]);
     }
 }

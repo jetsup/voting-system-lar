@@ -48,6 +48,8 @@ Route::post("update-voter", [UserController::class, "update"]);
 Route::get("view-voter", function () {
     return view("admin/view-voter");
 })->middleware("auth");
+
+Route::get("data/view_voters/{queryTypeID}/{placeID}", [VoterController::class, "getVoters"])->middleware("auth");
 // End Admin voter
 
 // Admin candidate
