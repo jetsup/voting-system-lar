@@ -202,7 +202,7 @@
                                         <script>
                                             // Fetch the database for the provinces using ajax
                                             var ajax = new XMLHttpRequest();
-                                            ajax.open("GET", "/data/get_provinces", true);
+                                            ajax.open("GET", "/data/get-provinces", true);
                                             ajax.onload = function() {
                                                 var list = JSON.parse(this.responseText);
                                                 var option = "<option value=''>-- PROVINCE --</option>";
@@ -244,7 +244,8 @@
                                                 style="width:80%;"
                                                 oninvalid="this.setCustomValidity('Provide your Ward')" required
                                                 minlength="4" name="ward" id="ward"
-                                                placeholder="eg. Starehe" class="form-control round-input" value="{{$voter->ward}}">
+                                                placeholder="eg. Starehe" class="form-control round-input"
+                                                value="{{ $voter->ward }}">
                                         </div>
                                     </div>
                                     <div class="form-group">

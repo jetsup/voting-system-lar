@@ -61,13 +61,13 @@ Route::get("add-candidate", function () {
     return view("admin/add-candidate");
 })->middleware("auth");
 
-Route::post("add-candidate", [CandidateController::class,"addCandidate"])->middleware("auth");
+Route::post("add-candidate", [CandidateController::class, "addCandidate"])->middleware("auth");
 
 Route::get("edit-candidate", function () {
     return view("admin/edit-candidate");
 })->middleware("auth");
 
-Route::post("edit-candidate", [CandidateController::class,"editCandidate"])->middleware("auth");
+Route::post("edit-candidate", [CandidateController::class, "editCandidate"])->middleware("auth");
 
 Route::post("update-candidate", [CandidateController::class, "updateCandidate"])->middleware("auth");
 
@@ -89,17 +89,18 @@ Route::get("generate-election", function () {
     return view("admin/generate-election");
 })->middleware("auth");
 
-Route::get("modify-election", function () {
-    return view("admin/modify-election");
-})->middleware("auth");
+Route::post("generate-election", [ElectionController::class, "generateElection"])->middleware("auth");
+
+Route::get("modify-election", [ElectionController::class, "modifyElection"])->middleware("auth");
 
 Route::get("complete-election", function () {
     return view("admin/complete-election");
 })->middleware("auth");
+
+Route::get("data/get-election-types", [ElectionController::class, "getElectionTypes"])->middleware("auth");
+Route::get("/data/get-elections/{electionTypeID}", [ElectionController::class, "getElections"])->middleware("auth");
+Route::get("/data/get-election-details/{electionID}", [ElectionController::class, "getElectionDetails"])->middleware("auth");
 // End Admin election
-Route::get("voting", function () {
-    return view("admin/voting");
-})->middleware("auth");
 
 // Admin voting
 Route::get("voting", function () {
@@ -184,11 +185,10 @@ Route::post("add_voter", [UserController::class, "store"])->middleware("auth");
 
 /************************DATA FETCH API(JSON)*****************************/
 // Data Requests
-Route::get("data/get_provinces", [LocationController::class, "get_provinces"]);
+Route::get("data/get-provinces", [LocationController::class, "get_provinces"]);
 Route::get("data/get_counties/{provinceID}", [LocationController::class, "get_counties"]);
 Route::get("data/get_constituencies/{countyID}", [LocationController::class, "get_constituencies"]);
 
-Route::get("data/get-elections", [ElectionController::class, "getElections"])->middleware("auth");
 Route::get("data/get-parties", [ElectionController::class, "getParties"])->middleware("auth");
 Route::get("data/get-positions", [ElectionController::class, "getPositions"])->middleware("auth");
 Route::get("data/get-party-logo/{partyID}", [ElectionController::class, "getPartyLogo"])->middleware("auth");

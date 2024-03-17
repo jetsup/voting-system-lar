@@ -137,7 +137,7 @@
                                     <script>
                                         // Fetch the database for the provinces using ajax
                                         var ajax = new XMLHttpRequest();
-                                        ajax.open("GET", "/data/get_provinces", true);
+                                        ajax.open("GET", "/data/get-provinces", true);
                                         ajax.onload = function() {
                                             var list = JSON.parse(this.responseText);
                                             var option = "<option value=''>-- PROVINCE --</option>";
