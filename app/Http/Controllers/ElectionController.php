@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Elections;
+use App\Models\ElectionStatus;
 use App\Models\ElectionTypes;
 use App\Models\PoliticalParties;
 use App\Models\PoliticalPositions;
@@ -58,10 +59,54 @@ class ElectionController extends Controller
         }
     }
 
-    public function modifyElection()
+    public function modifyElection(Request $request)
     {
-        $upcomingElections = Elections::whereIn("election_status", [1, 2, 3]/*upcoming|ongoing|postponed*/)->get();
-        return view("admin/modify-election", ["elections" => $upcomingElections]);
+        if ($request->method() == "POST") {
+            $electionType = $request->input("election-type");
+            $electionStatus = $request->input("election-status");
+            $electionID = $request->input("election-id");
+            $startDate = $request->input("start-date");
+            $endDate = $request->input("end-date");
+
+            $startDate = Carbon::parse($startDate)->format("Y-m-d H:i:s");
+            $endDate = Carbon::parse($endDate)->format("Y-m-d H:i:s");
+
+
+
+            if ($electionType == 1) {
+                $election = Elections::where("id", "=", $electionID)->update(
+                    [
+                        "election_type" => $electionType,
+                        "start_date" => $startDate,
+                        "end_date" => $endDate,
+                        "election_status" => $electionStatus,
+                    ]
+                );
+            } else {
+                $countyID = $request->input("county");
+                $constituencyID = $request->input("constituency");
+
+                $election = Elections::where("id", "=", $electionID)->update(
+                    [
+                        "election_type" => $electionType,
+                        "start_date" => $startDate,
+                        "end_date" => $endDate,
+                        "election_status" => $electionStatus,
+                        "county_id" => $countyID,
+                        "constituency_id" => $constituencyID
+                    ]
+                );
+            }
+            // dd($request, $election);
+            if ($election) {
+                return back()->with("message", "Election was generated successfully.");
+            } else {
+                return back()->with("error", "Election generation failed!");
+            }
+        } else if ($request->method() == "GET") {
+            $upcomingElections = Elections::whereIn("election_status", [1, 2, 3]/*upcoming|ongoing|postponed*/)->get();
+            return view("admin/modify-election", ["elections" => $upcomingElections]);
+        }
     }
 
     public function getElections(Request $request, $electionStatusID)
@@ -71,7 +116,7 @@ class ElectionController extends Controller
 
             $elections = Elections::where("start_date", ">", $todayDate)->orderBy("elections.start_date", "desc")->where("election_status", "=", $electionStatusID)
                 ->join("election_types", "elections.election_type", "=", "election_types.id")
-                ->get(["elections.*", "election_types.election_type"]);
+                ->get(["elections.*", "election_types.election_type AS type"]);
             // dd($todayDate, $elections);
         } else if ($electionStatusID == 2) { // ongoing
         } else if ($electionStatusID == 3) { // postponed
@@ -107,5 +152,15 @@ class ElectionController extends Controller
     {
         $logo = PoliticalParties::where("id", "=", $partyID)->first("party_image");
         return response()->json(["logo" => $logo]);
+    }
+
+    public function getElectionStatuses()
+    {
+        $statuses = ElectionStatus::orderBy("id")->get(["id", "election_status"]);
+        return response()->json(["statuses" => $statuses]);
+    }
+
+    public function generateElectionResults(Request $request){
+        dd($request);
     }
 }

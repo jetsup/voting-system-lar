@@ -22,7 +22,7 @@
         media="screen" />
     <!-- owl carousel -->
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}" type="text/css">
-    <link href="{{ asset('css/jquery-jvectormap-1.2.2.cs') }}s" rel="stylesheet">
+    <link href="{{ asset('css/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet">
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ asset('css/fullcalendar.css') }}">
     <link href="{{ asset('css/widgets.css') }}" rel="stylesheet">
@@ -150,7 +150,7 @@
                     <div class="col-lg-3 col-md-6 footer-links">
                         <h4>Useful Links</h4>
                         <ul>
-                            <li><i class="fa fa-angle-right"></i> <a href="vhome">Home</a></li>
+                            <li><i class="fa fa-angle-right"></i> <a href="/">Home</a></li>
                             <li><i class="fa fa-angle-right"></i> <a href="#">About us</a></li>
                             <li><i class="fa fa-angle-right"></i> <a href="#">Services</a></li>
                             <li><i class="fa fa-angle-right"></i> <a href="#">Terms of service</a></li>
@@ -160,7 +160,7 @@
                     <div class="col-lg-3 col-md-6 footer-contact">
                         <h4>Contact Us</h4>
                         <p>
-                            <strong>Email:</strong> info@example.com<br>
+                            <strong>Email:</strong> {{env("MAIL_FROM_ADDRESS")}}<br>
                         </p>
 
                         <div class="social-links">

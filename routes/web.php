@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\ComplainsController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoterController;
+use App\Models\Complains;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -92,6 +94,7 @@ Route::get("generate-election", function () {
 Route::post("generate-election", [ElectionController::class, "generateElection"])->middleware("auth");
 
 Route::get("modify-election", [ElectionController::class, "modifyElection"])->middleware("auth");
+Route::post("modify-election", [ElectionController::class, "modifyElection"])->middleware("auth");
 
 Route::get("complete-election", function () {
     return view("admin/complete-election");
@@ -135,9 +138,8 @@ Route::get("view-report", function () {
 // End Results and Reports
 
 // Admin complains
-Route::get("view-complain", function () {
-    return view("admin/view-complain");
-})->middleware("auth");
+Route::get("view-complain", [ComplainsController::class,"getComplains"])->middleware("auth");
+Route::post("/complain/resolve", [ComplainsController::class,"resolveComplain"])->middleware("auth");
 Route::get("reply-complain", function () {
     return view("admin/reply-complain");
 })->middleware("auth");
@@ -185,11 +187,15 @@ Route::post("add_voter", [UserController::class, "store"])->middleware("auth");
 
 /************************DATA FETCH API(JSON)*****************************/
 // Data Requests
-Route::get("data/get-provinces", [LocationController::class, "get_provinces"]);
-Route::get("data/get_counties/{provinceID}", [LocationController::class, "get_counties"]);
-Route::get("data/get_constituencies/{countyID}", [LocationController::class, "get_constituencies"]);
+Route::get("data/get-provinces", [LocationController::class, "getProvinces"]);
+Route::get("data/get_counties/{provinceID}", [LocationController::class, "getCounties"]);
+Route::get("data/get_constituencies/{countyID}", [LocationController::class, "getConstituencies"]);
+Route::get("data/get-places/{queryFor}/{electionID}", [LocationController::class, "getPlaces"]);
 
 Route::get("data/get-parties", [ElectionController::class, "getParties"])->middleware("auth");
 Route::get("data/get-positions", [ElectionController::class, "getPositions"])->middleware("auth");
 Route::get("data/get-party-logo/{partyID}", [ElectionController::class, "getPartyLogo"])->middleware("auth");
+Route::get("data/election-statuses", [ElectionController::class, "getElectionStatuses"])->middleware("auth");
+
+Route::get("data/election-results", [ElectionController::class,"generateElectionResults"])->middleware("auth");
 // End DataRequests

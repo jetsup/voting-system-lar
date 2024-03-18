@@ -14,6 +14,7 @@ use App\Models\PoliticalPositions;
 use App\Models\Provinces;
 use App\Models\User;
 use App\Models\UserTypes;
+use Database\Factories\ComplainsFactory;
 use Database\Factories\ElectionsFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
@@ -203,6 +204,12 @@ class DatabaseSeeder extends Seeder
         if (self::GENERATE_DUMMY_DATA) {
             $this->command->info('Creating Dummy Users.................');
             UserFactory::new()->count(20)->create();
+        }
+
+        // Create Dummy Complains
+        if (self::GENERATE_DUMMY_DATA) {
+            $this->command->info('Creating Dummy Complains.................');
+            ComplainsFactory::new()->count(30)->create();
         }
 
         // Create political positions

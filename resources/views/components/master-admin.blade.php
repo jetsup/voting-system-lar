@@ -77,7 +77,7 @@
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="profile-ava">
                                 <img alt="Image not found" height="33" width="33"
-                                    src="{{ asset(auth()->user()->dp) }}">
+                                    src="{{ asset('/storage/' . auth()->user()->dp) }}">
                             </span>
                             <span
                                 class="username">{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</span>
@@ -139,6 +139,19 @@
                     <li class="sub-menu">
                         <a href="javascript:;" class="">
                             <i class="icon_document_alt"></i>
+                            <span>Election</span>
+                            <span class="menu-arrow arrow_carrot-right"></span>
+                        </a>
+                        <ul class="sub">
+                            <li><a class="" href="/generate-election">Generate Election</a></li>
+                            <li><a class="" href="/modify-election">Modify Election</a></li>
+                            {{-- <li><a class="" href="/complete-election">Complete Election</a></li> --}}
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;" class="">
+                            <i class="icon_document_alt"></i>
                             <span>Candidate</span>
                             <span class="menu-arrow arrow_carrot-right"></span>
                         </a>
@@ -149,20 +162,8 @@
                         </ul>
                     </li>
 
-                    <li class="sub-menu">
-                        <a href="javascript:;" class="">
-                            <i class="icon_document_alt"></i>
-                            <span>Election</span>
-                            <span class="menu-arrow arrow_carrot-right"></span>
-                        </a>
-                        <ul class="sub">
-                            <li><a class="" href="/generate-election">Generate Election</a></li>
-                            <li><a class="" href="/modify-election">Modify Election</a></li>
-                            <li><a class="" href="/complete-election">Complete Election</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="sub-menu">
+                    {{-- TODO: Admin voting area --}}
+                    {{-- <li class="sub-menu">
                         <a href="javascript:;" class="">
                             <i class="icon_document_alt"></i>
                             <span>Voting</span>
@@ -171,7 +172,7 @@
                         <ul class="sub">
                             <li><a class="" href="/voting">Polling Booth</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <li class="sub-menu">
                         <a href="javascript:;" class="">

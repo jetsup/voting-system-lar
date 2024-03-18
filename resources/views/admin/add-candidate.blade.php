@@ -25,8 +25,7 @@
                     document.getElementById("county").value = candidate.county;
                     document.getElementById("constituency").value = candidate.constituency;
                     document.getElementById("constituency").value = candidate.ward;
-                    document.getElementById("candidate_img").src = "/" + (candidate.dp ==
-                        "images/web-assets/user.png") ? candidate.dp : "storage/" + candidate.dp;
+                    document.getElementById("candidate_img").src = "/storage/" + candidate.dp;
                     if (candidate.candidate) {
                         document.getElementById("submit_btn").disabled = true;
                     } else {
@@ -113,7 +112,7 @@
 
         function populateElections() {
             let ajax = new XMLHttpRequest();
-            ajax.open("GET", "/data/get-elections", true);
+            ajax.open("GET", "/data/get-elections/1", true);
             ajax.onload = function() {
                 if (this.status == 200) {
                     let elections = JSON.parse(this.responseText).elections;
@@ -226,7 +225,8 @@
                                         <label class="col-sm-2 control-label">Candidate Image</label>
                                         <div class="col-lg-2 col-sm-2">
                                             <div class="follow-ava2" style="position: relative; left:50px;">
-                                                <img id="candidate_img" src="{% static 'images/user.png' %}"
+                                                <img id="candidate_img"
+                                                    src="{{ asset('storage/images/dp/user.png') }}"
                                                     style="max-height:150px; max-width: 150px; min-width: 150px; min-height: 150px;
                                      border-top-left-radius: 50% 50%;
                                          border-top-right-radius: 50% 50%;
@@ -269,7 +269,7 @@
                                         <label class="col-sm-2 control-label">Party Image</label>
                                         <div class="col-lg-2 col-sm-2">
                                             <div class="follow-ava2" style="position: relative; left:50px;">
-                                                <img id="party_img" src="{% static 'images/user.png' %}"
+                                                <img id="party_img" src="{{ asset('storage/images/elections/political_parties.jpg') }}"
                                                     style="max-height:150px; max-width: 150px; min-width: 150px; min-height: 150px;
                                      border-top-left-radius: 50% 50%;
                                          border-top-right-radius: 50% 50%;

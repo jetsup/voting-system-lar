@@ -25,7 +25,7 @@
         media="screen" />
     <!-- owl carousel -->
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}" type="text/css">
-    <link href="{{ asset('css/jquery-jvectormap-1.2.2.cs') }}s" rel="stylesheet">
+    <link href="{{ asset('css/jquery-jvectormap-1.2.2.css') }}s" rel="stylesheet">
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ asset('css/fullcalendar.css') }}">
     <link href="{{ asset('css/widgets.css') }}" rel="stylesheet">

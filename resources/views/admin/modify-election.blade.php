@@ -83,6 +83,8 @@
             selectElectionType(document.getElementById("election-type").value);
         }
 
+        function electionStatusChanged() {}
+
         function getElectionDetails(electionID) {
             let ajax = new XMLHttpRequest();
             ajax.open("GET", "/data/get-election-details/" + electionID, true);
@@ -100,6 +102,7 @@
                     }
                     document.getElementById("election-type").innerHTML = optionElectionTypes;
                     document.getElementById("election-type").value = election.election_type;
+                    document.getElementById("election-status").value = election.election_status;
                     let startDateElement = document.getElementById("start-date");
                     let endDateElement = document.getElementById("end-date");
 
@@ -107,8 +110,30 @@
                     startDateElement.removeAttribute("readonly");
                     endDateElement.removeAttribute("readonly");
 
-                    startDateElement.value = election.start_date.split(" ").join("T");
-                    endDateElement.value = election.end_date.split(" ").join("T");
+                    // Parse the datetime string into a Date object
+                    var datetime = new Date(election.start_date);
+                    // Extract date components
+                    var year = datetime.getFullYear();
+                    var month = ("0" + (datetime.getMonth() + 1)).slice(-2); // Months are zero based
+                    var day = ("0" + datetime.getDate()).slice(-2);
+                    // Extract time components
+                    var hours = ("0" + datetime.getHours()).slice(-2);
+                    var minutes = ("0" + datetime.getMinutes()).slice(-2);
+                    // Formatted datetime string without seconds
+                    var formattedDatetime = year + "-" + month + "-" + day + " " + hours + ":" + minutes;
+                    startDateElement.value = year + "-" + month + "-" + day + "T" + hours + ":" + minutes;
+
+                    var datetime = new Date(election.end_date);
+                    // Extract date components
+                    var year = datetime.getFullYear();
+                    var month = ("0" + (datetime.getMonth() + 1)).slice(-2); // Months are zero based
+                    var day = ("0" + datetime.getDate()).slice(-2);
+                    // Extract time components
+                    var hours = ("0" + datetime.getHours()).slice(-2);
+                    var minutes = ("0" + datetime.getMinutes()).slice(-2);
+                    // Formatted datetime string without seconds
+                    var formattedDatetime = year + "-" + month + "-" + day + " " + hours + ":" + minutes;
+                    endDateElement.value = year + "-" + month + "-" + day + "T" + hours + ":" + minutes;
 
                     validateInputs();
                 }
@@ -141,12 +166,12 @@
                                     Election
                                 </header>
                                 <div class="panel-body">
-                                    <form class="form-horizontal " method="POST" action="modify_election">
+                                    <form class="form-horizontal " method="POST" action="/modify-election">
                                         @csrf
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Election ID</label>
                                             <div class="col-sm-10">
-                                                <select name="eno" required class="form-control round-input"
+                                                <select name="election-id" required class="form-control round-input"
                                                     style="width:80%;" onchange="getElectionDetails(this.value)">
                                                 </select>
                                             </div>
@@ -161,7 +186,7 @@
                                                         option += "<option value='" + list[i].id + "'>" + list[i].election_type +
                                                             " [" + list[i].start_date + " - " + list[i].end_date + "]" + "</option>";
                                                     }
-                                                    document.getElementsByName("eno")[0].innerHTML = option;
+                                                    document.getElementsByName("election-id")[0].innerHTML = option;
                                                 };
                                                 ajax.send();
                                             </script>
@@ -172,11 +197,38 @@
                                                 <select name="election-type" id="election-type" required
                                                     class="form-control round-input" style="width:80%;"
                                                     onchange="validateInputs()">
-                                                    {{-- {% for i in elections %}
-                                                    <option value="{{ i . election_type }}">{{ i . election_type }}</option>
-                                                    {% endfor %} --}}
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Election Status</label>
+                                            <div class="col-sm-10">
+                                                <select name="election-status" id="election-status" required
+                                                    class="form-control round-input" style="width:80%;"
+                                                    onchange="electionStatusChanged()">
+                                                </select>
+                                            </div>
+                                            <script>
+                                                function populateElectionStatus() {
+                                                    let ajax = new XMLHttpRequest();
+                                                    ajax.open("GET", "/data/election-statuses", true);
+                                                    ajax.onload = function() {
+                                                        if (this.status == 200) {
+                                                            let statuses = JSON.parse(this.responseText).statuses;
+
+                                                            let statusOptions = "";
+                                                            for (let i = 0; i < statuses.length; i++) {
+                                                                statusOptions += "<option value='" + statuses[i].id + "'>" +
+                                                                    statuses[i].election_status + "</option>"
+                                                            }
+                                                            document.getElementById("election-status").innerHTML = statusOptions;
+                                                        }
+                                                    };
+                                                    ajax.send();
+                                                }
+                                                populateElectionStatus();
+                                            </script>
                                         </div>
 
                                         <div class="form-group" id="province-div" hidden>
