@@ -116,13 +116,13 @@ Route::get("generate-result", function () {
     return view("admin/generate-result");
 })->middleware("auth");
 
-Route::get("view-result", function () {
+Route::get("view-result", [ElectionController::class, "viewResults"]/*function () {
     if (auth()->user()->user_type_id == 1) {
         return view("admin/view-result");
     } else {
         return view("voter/view-result");
     }
-})->middleware("auth");
+}*/)->middleware("auth");
 
 Route::get("generate-report", function () {
     return view("admin/generate-report");
@@ -163,9 +163,9 @@ Route::post("election/vote", [ElectionController::class, "castVote"])->middlewar
 // End Voter election
 
 // Voter complain
-Route::get("complain", function () {
+Route::get("complain", [ComplainsController::class, "complain"]/*function () {
     return view("voter/complain");
-})->middleware("auth");
+}*/)->middleware("auth");
 // End Voter complain
 /********************END VOTER********************/
 // End Page Routes

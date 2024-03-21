@@ -49,13 +49,13 @@
                     <div class="col-lg-12">
                         <section class="panel">
                             <div class="panel-body">
-                                <form class="form-horizontal" method="POST" action="submitcomplain">
+                                <form class="form-horizontal" method="POST" action="/complain">
                                     @csrf
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Voter ID</label>
                                         <div class="col-sm-10">
                                             <label name="v_id" class="form-control"
-                                                style="width:80%;">{{ "voterid_no" }}</label>
+                                                style="width:80%;">{{ auth()->user()->id_number }}</label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -72,9 +72,6 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-lg-offset-2 col-lg-10">
-                                            {{-- {% for message in messages %}
-                                            <h3 style="color: green;"> {{ message }} </h3>
-                                            {% endfor %} --}}
                                         </div>
                                     </div>
                                 </form>
@@ -105,6 +102,16 @@
                                     </tr>
                                 </tbody>
                                 {% endfor %} --}}
+                                <tbody>
+                                    @foreach ($complains as $complain)
+                                        <tr>
+                                            <td>{{ $complain->id }}</td>
+                                            <td>{{ $complain->message }}</td>
+                                            {{-- <td>{{ $complain->reply }}</td> --}}
+                                            <td></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
                             </table>
                         </section>
                     </div>

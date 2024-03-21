@@ -351,4 +351,19 @@ class ElectionController extends Controller
 
         return back();
     }
+
+    public function viewResults(Request $request)
+    {
+        if (auth()->user()->user_type_id == 1) {
+            return view("admin/view-result");
+        } else {
+            return view(
+                "voter/view-result",
+                [
+                    "presidents" => [], "governors" => [], "senators" => [],
+                    "womenRepresentatives" => [], "mps" => [], "mcas" => []
+                ]
+            );
+        }
+    }
 }

@@ -26,4 +26,25 @@ class ComplainsController extends Controller
             return back()->with("error", "Could not resolve the complain!!");
         }
     }
+
+    public function complain(Request $request)
+    {
+        if ($request->method() == "POST") {
+            $complain = $request->input("complain");
+            $complainCreated = Complains::create(["from" => auth()->user()->id, "complain" => $complain]);
+
+            if ($complainCreated) {
+                return back()->with("message", "Complain filed successfully!");
+            } else {
+                return back()->with("error", "Complain creation failed!");
+            }
+        } else if ($request->method() == "GET") {
+            if (auth()->user()->user_type_id == 1) {
+                return view("admin/complain");
+            } else {
+                $complains = Complains::where("from", "=", auth()->user()->id)->get();
+                return view("voter/complain", ["complains" => $complains]);
+            }
+        }
+    }
 }

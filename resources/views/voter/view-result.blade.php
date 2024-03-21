@@ -36,8 +36,53 @@
     </head>
 
     <body>
-        <section id="main-content" style="margin-left:0px;margin-top: 60px;">
-            <section class="wrapper" style="margin-top:60px;">
+        <aside>
+            <div id="sidebar" class="nav-collapse" style="background-color: rgba(21, 30, 65, 0.98);">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" style="margin-top: 0px;">
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="president">
+                            <i class=""></i>
+                            <span>President</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="governor">
+                            <i class=""></i>
+                            <span>Governor</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="senetor">
+                            <i class=""></i>
+                            <span>Senetor</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="women-rep">
+                            <i class=""></i>
+                            <span>Women Rep</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="mp">
+                            <i class=""></i>
+                            <span>MP</span>
+                        </a>
+                    </li>
+                    {{-- <li class="sub-menu">
+                        <a class="category" href="#" data-category="mca">
+                            <i class=""></i>
+                            <span>MCA</span>
+                        </a>
+                    </li> --}}
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+
+        <section id="main-content" style="margin-left: 180px; margin-right: 50px;margin-top: 70px;height: fit-content;">
+            <section class="wrapper" style="margin-top:0px;">
                 <div class="row">
                     <div class="col-lg-12">
                         <h3 class="page-header"><i class="fa fa-file-text-o"></i>Result</h3>
@@ -50,50 +95,265 @@
                                 Result
                             </header>
                             <div class="panel-body">
-                                <form class="form-horizontal" action="vview_result" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Election ID</label>
-                                        <div class="col-sm-10">
-                                            <select name="e_id" class="form-control" style="width:80%;height:34px;">
-                                                <option value="" selected>Select Election ID</option>
-                                                {{-- {% for i in elections %}
-                                  <option value="{{i.election_id}}">{{i.election_id}}</option>
-                              {% endfor %} --}}
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="category-list" id="president-list">
+                                    <!-- List of president candidates -->
+                                    <h1>President</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- loop the data --}}
+                                                @foreach ($presidents as $president)
+                                                    <tr>
+                                                        <td><img src="{{ asset($president->dp) }}" alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $president->first_name }} {{ $president->last_name }}
+                                                        </td>
+                                                        <td>{{ $president->party }}</td>
+                                                        <td>{{ $president->party_image }}</td>
+                                                        <td>{{ $president->total_votes }}</td>
+                                                        <td> {{ $presidents->cast_votes }}</td>
+                                                        <td>{{ ($president->total_votes / $presidents->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
 
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">Result Type</label>
-                                        <div class="col-sm-10">
-                                            <select name="resulttype" class="form-control"
-                                                style="width:80%;height:34px;" required>
-                                                <option value="" selected>Select Result Type</option>
-                                                <option value="partywise">Partywise</option>
-                                                <option value="constituencywise">Constituencywise</option>
-                                            </select>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <div class="col-lg-offset-2 col-lg-10">
-                                            <button class="btn btn-primary" name="view_result" type="submit">View
-                                                Result</button>
-                                        </div>
+                                <div class="category-list" id="governor-list" style="display:none;">
+                                    <!-- List of governor candidates -->
+                                    <h1>Governor</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- loop the data --}}
+                                                @foreach ($governors as $governor)
+                                                    <tr>
+                                                        <td><img src="{{ asset($governor->dp) }}" alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $governor->first_name }} {{ $governor->last_name }}
+                                                        </td>
+                                                        <td>{{ $governor->party }}</td>
+                                                        <td>{{ $governor->party_image }}</td>
+                                                        <td>{{ $governor->total_votes }}</td>
+                                                        <td> {{ $governors->cast_votes }}</td>
+                                                        <td>{{ ($governor->total_votes / $governors->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </form>
+                                </div>
+
+                                <div class="category-list" id="senetor-list" style="display:none;">
+                                    <!-- List of senetor candidates -->
+                                    <h1>Senetor</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- loop the data --}}
+                                                @foreach ($senators as $senator)
+                                                    <tr>
+                                                        <td><img src="{{ asset($senator->dp) }}" alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $senator->first_name }} {{ $senator->last_name }}
+                                                        </td>
+                                                        <td>{{ $senator->party }}</td>
+                                                        <td>{{ $senator->party_image }}</td>
+                                                        <td>{{ $senator->total_votes }}</td>
+                                                        <td> {{ $senators->cast_votes }}</td>
+                                                        <td>{{ ($senator->total_votes / $senators->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="category-list" id="women-rep-list" style="display:none;">
+                                    <!-- List of women-rep candidates -->
+                                    <h1>Women Representative</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- loop the data --}}
+                                                @foreach ($womenRepresentatives as $womanRepresentative)
+                                                    <tr>
+                                                        <td><img src="{{ asset($womanRepresentative->dp) }}"
+                                                                alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $womanRepresentative->first_name }}
+                                                            {{ $womanRepresentative->last_name }}
+                                                        </td>
+                                                        <td>{{ $womanRepresentative->party }}</td>
+                                                        <td>{{ $womanRepresentative->party_image }}</td>
+                                                        <td>{{ $womanRepresentative->total_votes }}</td>
+                                                        <td> {{ $womenRepresentatives->cast_votes }}</td>
+                                                        <td>{{ ($womanRepresentative->total_votes / $womenRepresentatives->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="category-list" id="mp-list" style="display:none;">
+                                    <!-- List of mp candidates -->
+                                    <h1>MP</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- loop the data --}}
+                                                @foreach ($mps as $mp)
+                                                    <tr>
+                                                        <td><img src="{{ asset($mp->dp) }}" alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $mp->first_name }} {{ $mp->last_name }}
+                                                        </td>
+                                                        <td>{{ $mp->party }}</td>
+                                                        <td>{{ $mp->party_image }}</td>
+                                                        <td>{{ $mp->total_votes }}</td>
+                                                        <td> {{ $mps->cast_votes }}</td>
+                                                        <td>{{ ($mp->total_votes / $mps->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {{-- TODO For MCA data for ward will need to be added to get a finite response --}}
+                                {{-- <div class="category-list" id="mca-list" style="display:none;">
+                                    <!-- List of mca candidates -->
+                                    <h1>MCA</h1>
+                                    <div class="">
+                                        <table style="width: 100%;border-collapse: collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Profile</th>
+                                                    <th>Name</th>
+                                                    <th>Party Name</th>
+                                                    <th>Logo</th>
+                                                    <th>Votes</th>
+                                                    <th>Total Cast</th>
+                                                    <th>% Votes</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($mcas as $mca)
+                                                    <tr>
+                                                        <td><img src="{{ asset($mca->dp) }}" alt="Profile Image">
+                                                        </td>
+                                                        <td>{{ $mca->first_name }} {{ $mca->last_name }}
+                                                        </td>
+                                                        <td>{{ $mca->party }}</td>
+                                                        <td>{{ $mca->party_image }}</td>
+                                                        <td>{{ $mca->total_votes }}</td>
+                                                        <td> {{ $mcas->cast_votes }}</td>
+                                                        <td>{{ ($mca->total_votes / $mcas->cast_votes) * 100 }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> --}}
                             </div>
                         </section>
                     </div>
                 </div>
-                {{-- <div>
-       {% for message in messages %}
-       <h3 align="center">{{message}}</h3>
-       {% endfor %}
-   </div> --}}
             </section>
         </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const categories = document.querySelectorAll('.category');
+                categories.forEach(function(category) {
+                    category.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const categoryToShow = this.getAttribute('data-category');
+                        showCategory(categoryToShow);
+                    });
+                });
+
+                function showCategory(category) {
+                    const categoryLists = document.querySelectorAll('.category-list');
+                    categoryLists.forEach(function(list) {
+                        if (list.id === category + '-list') {
+                            list.style.display = 'block';
+                        } else {
+                            list.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 
     </html>
