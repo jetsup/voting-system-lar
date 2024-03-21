@@ -60,7 +60,7 @@ Route::get("data/view_voters/{queryTypeID}/{placeID}", [VoterController::class, 
 Route::get("search-voter/{idNumber}", [VoterController::class, "searchVoter"])->middleware("auth");
 
 Route::get("add-candidate", function () {
-    return view("admin/add-candidate");
+    return view("admin/add-candidate", ["message" => "", "error" => ""]);
 })->middleware("auth");
 
 Route::post("add-candidate", [CandidateController::class, "addCandidate"])->middleware("auth");
@@ -138,8 +138,8 @@ Route::get("view-report", function () {
 // End Results and Reports
 
 // Admin complains
-Route::get("view-complain", [ComplainsController::class,"getComplains"])->middleware("auth");
-Route::post("/complain/resolve", [ComplainsController::class,"resolveComplain"])->middleware("auth");
+Route::get("view-complain", [ComplainsController::class, "getComplains"])->middleware("auth");
+Route::post("/complain/resolve", [ComplainsController::class, "resolveComplain"])->middleware("auth");
 Route::get("reply-complain", function () {
     return view("admin/reply-complain");
 })->middleware("auth");
@@ -158,9 +158,7 @@ Route::get("profile", [SystemUserController::class, "get_profile"])->middleware(
 // End Voter profile
 
 // Voter election
-Route::get("election", function () {
-    return view("voter/election");
-})->middleware("auth");
+Route::get("election", [ElectionController::class, "voting"])->middleware("auth");
 // End Voter election
 
 // Voter complain
@@ -194,8 +192,9 @@ Route::get("data/get-places/{queryFor}/{electionID}", [LocationController::class
 
 Route::get("data/get-parties", [ElectionController::class, "getParties"])->middleware("auth");
 Route::get("data/get-positions", [ElectionController::class, "getPositions"])->middleware("auth");
+Route::get("data/get-positions/{userIDNumber}", [ElectionController::class, "getRelevantPositions"])->middleware("auth");
 Route::get("data/get-party-logo/{partyID}", [ElectionController::class, "getPartyLogo"])->middleware("auth");
 Route::get("data/election-statuses", [ElectionController::class, "getElectionStatuses"])->middleware("auth");
 
-Route::get("data/election-results", [ElectionController::class,"generateElectionResults"])->middleware("auth");
+Route::get("data/election-results", [ElectionController::class, "generateElectionResults"])->middleware("auth");
 // End DataRequests

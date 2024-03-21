@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidates;
+use App\Models\Constituencies;
+use App\Models\Counties;
 use App\Models\Elections;
 use App\Models\ElectionStatus;
 use App\Models\ElectionTypes;
 use App\Models\PoliticalParties;
 use App\Models\PoliticalPositions;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -148,6 +152,18 @@ class ElectionController extends Controller
         return response()->json(["positions" => $positions]);
     }
 
+    public function getRelevantPositions(Request $request, $userIDNumber)
+    {
+        $userGender = User::where("id_number", $userIDNumber)->first("gender_id")->toArray()["gender_id"];
+        if ($userGender == 1/*MALE*/) {
+            $positions = PoliticalPositions::orderBy("id")->get(["id", "position"]);
+            unset($positions[3]); // remove WomenRepresentative from positions options
+        } else {
+            $positions = PoliticalPositions::orderBy("id")->get(["id", "position"]);
+        }
+        return response()->json(["positions" => $positions]);
+    }
+
     public function getPartyLogo(Request $request, $partyID)
     {
         $logo = PoliticalParties::where("id", "=", $partyID)->first("party_image");
@@ -160,7 +176,98 @@ class ElectionController extends Controller
         return response()->json(["statuses" => $statuses]);
     }
 
-    public function generateElectionResults(Request $request){
+    public function generateElectionResults(Request $request)
+    {
         dd($request);
+    }
+
+    public function voting()
+    {
+        $userConstituency = Constituencies::where("id", "=", auth()->user()->constituency_id)->first();
+        // $userCounty = Counties::where("id", "=", $userConstituency->county_id)->first();
+        $constituenciesInCounty = Constituencies::where("county_id", $userConstituency->county_id)->get(["id", "constituency", "county_id"])->pluck("id")->toArray();
+        // no filters
+        $presidents = Candidates::where("vie_position_id", "=", 1)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->join("political_parties AS parties", function ($join) {
+            $join->on("candidates.party_id", "=", "parties.id");
+        })->select([
+            "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+            "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+            "parties.party", "parties.party_image"
+        ])->orderBy("candidates.id")->get();
+
+        // be from same county as voter
+        $governors = Candidates::where("vie_position_id", "=", 2)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->whereIn("users.constituency_id", $constituenciesInCounty)
+            ->join("political_parties AS parties", function ($join) {
+                $join->on("candidates.party_id", "=", "parties.id");
+            })->select([
+                "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+                "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+                "parties.party", "parties.party_image"
+            ])->orderBy("candidates.id")->get();
+
+        $senators = Candidates::where("vie_position_id", "=", 3)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->whereIn("users.constituency_id", $constituenciesInCounty)
+            ->join("political_parties AS parties", function ($join) {
+                $join->on("candidates.party_id", "=", "parties.id");
+            })->select([
+                "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+                "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+                "parties.party", "parties.party_image"
+            ])->orderBy("candidates.id")->get();
+
+        $womenReps = Candidates::where("vie_position_id", "=", 4)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->whereIn("users.constituency_id", $constituenciesInCounty)
+            ->join("political_parties AS parties", function ($join) {
+                $join->on("candidates.party_id", "=", "parties.id");
+            })->select([
+                "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+                "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+                "parties.party", "parties.party_image"
+            ])->orderBy("candidates.id")->get();
+
+        // be from same constituency
+        $mps = Candidates::where("vie_position_id", "=", 5)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->where("users.constituency_id", "=", $userConstituency)
+            ->join("political_parties AS parties", function ($join) {
+                $join->on("candidates.party_id", "=", "parties.id");
+            })->select([
+                "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+                "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+                "parties.party", "parties.party_image"
+            ])->orderBy("candidates.id")->get();
+
+        $mcas = Candidates::where("vie_position_id", "=", 5)->join("users", function ($join) {
+            $join->on("candidates.user_id", "=", "users.id");
+        })->where("users.constituency_id", "=", $userConstituency)
+            ->join("political_parties AS parties", function ($join) {
+                $join->on("candidates.party_id", "=", "parties.id");
+            })->select([
+                "candidates.id", "candidates.vie_position_id", "candidates.election_id",
+                "candidates.user_id", "users.first_name", "users.last_name", "users.dp",
+                "parties.party", "parties.party_image"
+            ])->orderBy("candidates.id")->get();
+
+
+
+        // dd($constituenciesInCounty, $governors);
+
+        if (auth()->user()->user_type_id == 1) {
+        } else if (auth()->user()->user_type_id == 2) {
+            return view(
+                "voter/election",
+                [
+                    "presidents" => $presidents, "governors" => $governors, "senators" => $senators,
+                    "womenRepresentatives" => $womenReps, "mps" => $mps, "mcas" => $mcas,
+                    "voted" => 0,
+                ]
+            );
+        }
     }
 }

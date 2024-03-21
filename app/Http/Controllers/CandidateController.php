@@ -24,6 +24,13 @@ class CandidateController extends Controller
         // TODO: necessary?
         $affidavit = $request->file("affidavit");
 
+        // check if the candidate already in this election candidate list
+        $candidateRegistered = Candidates::where("user_id", "=", $userID)->where("election_id", "=", $electionID)->first();
+
+        if ($candidateRegistered) {
+            return back()->with("message", "Candidate already in added!");
+        }
+
         // add the candidate, no need to check if is already in database, is not
         $candidate = Candidates::create(["user_id" => $userID, "vie_position_id" => $viePositionID, "party_id" => $partyID, "election_id" => $electionID]);
 

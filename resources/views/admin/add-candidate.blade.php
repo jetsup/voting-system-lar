@@ -79,9 +79,11 @@
         }
 
         function populatePositions() {
+            let userIDNumber = document.getElementById("id_number").value;
             let ajax = new XMLHttpRequest();
-            ajax.open("GET", "/data/get-positions");
+            ajax.open("GET", "/data/get-positions/" + userIDNumber);
             ajax.onload = function() {
+                console.log(this.responseText);
                 if (this.status == 200) {
                     let positions = JSON.parse(this.responseText).positions;
                     let positionsSelector = document.getElementById("position")
@@ -135,10 +137,21 @@
         <section id="main-content" style=" margin-right:120px;">
             <section class="wrapper">
                 <!-- TODO: fix this -->
-                <div id="custom-popup" style="width: 300px;height: 100px;position: fixed;z-index: 2;left: 75%;top: 15%;"
-                    x-data="{ showMessage: true, message: 'Hello', timeout: 3000 }" x-init="setTimeout(() => showMessage = false, timeout);" x-show="showMessage">
-                    <p style="color: green;font-size: 30px;" x-text="message"></p>
-                </div>
+                @if ($message)
+                    <div id="custom-popup"
+                        style="width: 300px;height: 100px;position: fixed;z-index: 2;left: 75%;top: 15%;"
+                        x-data="{ showMessage: true, message: '{{ $message | $error }}', timeout: 3000 }" x-init="setTimeout(() => showMessage = false, timeout);" x-show="showMessage">
+                        <p style="color: green;font-size: 30px;" x-text="message"></p>
+                    </div>
+                @else
+                    @if ($error)
+                        <div id="custom-popup"
+                            style="width: 300px;height: 100px;position: fixed;z-index: 2;left: 75%;top: 15%;"
+                            x-data="{ showMessage: true, message: '{{ $message }}', timeout: 3000 }" x-init="setTimeout(() => showMessage = false, timeout);" x-show="showMessage">
+                            <p style="color: green;font-size: 30px;" x-text="message"></p>
+                        </div>
+                    @endif
+                @endif
                 <div class="row">
                     <div class="col-lg-12">
                         <h3 class="page-header"><i class="fa fa-file-text-o"></i>Add Candidate</h3>
@@ -218,7 +231,8 @@
                                         <label class="col-sm-2 control-label">Constituency</label>
                                         <div class="col-sm-10">
                                             <input type="text" readonly name="constituency"
-                                                class="form-control round-input" style="width:80%;" id="constituency">
+                                                class="form-control round-input" style="width:80%;"
+                                                id="constituency">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -269,7 +283,8 @@
                                         <label class="col-sm-2 control-label">Party Image</label>
                                         <div class="col-lg-2 col-sm-2">
                                             <div class="follow-ava2" style="position: relative; left:50px;">
-                                                <img id="party_img" src="{{ asset('storage/images/elections/political_parties.jpg') }}"
+                                                <img id="party_img"
+                                                    src="{{ asset('storage/images/elections/political_parties.jpg') }}"
                                                     style="max-height:150px; max-width: 150px; min-width: 150px; min-height: 150px;
                                      border-top-left-radius: 50% 50%;
                                          border-top-right-radius: 50% 50%;

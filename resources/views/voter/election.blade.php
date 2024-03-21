@@ -1,139 +1,177 @@
 <x-master-voter>
     @csrf
+    @section('sidebar')
+        <aside>
+            <div id="sidebar" class="nav-collapse" style="background-color: rgba(21, 30, 65, 0.98);">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" style="margin-top: 0px;">
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="president">
+                            <i class=""></i>
+                            <span>President</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="governor">
+                            <i class=""></i>
+                            <span>Governor</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="senetor">
+                            <i class=""></i>
+                            <span>Senetor</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="women-rep">
+                            <i class=""></i>
+                            <span>Women Rep</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="mp">
+                            <i class=""></i>
+                            <span>MP</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="category" href="#" data-category="mca">
+                            <i class=""></i>
+                            <span>MCA</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+    @endsection
 
     <body>
-        <section id="main-content" style="margin-left: 60px; margin-right: 50px;margin-top: 60px;">
-            <section class="wrapper" style="margin-top: 60px;">
+        <section id="main-content" style="margin-left: 180px; margin-right: 50px;margin-top: 70px;height: fit-content;">
+            <section class="wrapper" style="margin-top: 0px;">
                 <div class="row">
                     <div class="col-lg-12">
                         <h3 class="page-header"><i class="fa fa-inbox"></i>Election</h3>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <section class="panel">
-                            <form class="form-horizontal" action="vote" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="row">
-                                    {{-- {% for candidate in candidates %}
-                                    <div class="col-lg-12">
-                                        <div class="profile-widget profile-widget-info">
-                                            <div class="panel-body" style="background-color: white; color:black;">
-                                                <div class="col-lg-2 col-sm-2">
-                                                    <div class="follow-ava">
-                                                        <a><img src="{{ candidate . candidate_identity . voter_image . url }}"
-                                                                alt="" class="het-90"></a>
-                                                    </div>
-                                                    <h4 class="bg-red">{{ "candidate . candidate_identity . name" }}
-                                                        {{ "candidate . candidate_identity . father_name" }}</h4>
-                                                </div>
-                                                <div class="col-lg-2 col-sm-2">
-                                                    <div class="follow-ava">
-                                                        <a><img src="{{ candidate . party_image . url }}" alt=""
-                                                                class="het-90"></a>
-                                                    </div>
-                                                    <div class="bg-red">
-                                                        <label for="can">
-                                                            My Text
-                                                        </label>
-                                                        <input class="form-control" type="radio" name="can"
-                                                            value="{{ candidate . vi_position_id }}">
-                                                    </div>
+
+                <section id="container" class="">
+                    <section id="main-content" style=" margin-right:0px;margin-left:0px;">
+                        <section class="wrapper" style="margin-top: 0">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <section class="panel">
+                                        <form class="form-horizontal" action="/election/vote" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+
+                                            <div class="category-list" id="president-list">
+                                                <!-- List of president candidates -->
+                                                <h1>President</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($presidents as $president)
+                                                        <x-candidate-vote-view :candidate=$president />
+                                                    @endforeach
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %} --}}
-                                    <div>
-                                        <!-- TODO: style -->
-                                        <br>
-                                        <video id="video" width="320" height="240" autoplay></video>
-                                    </div>
-                                    <div>
-                                        <div class="col-lg-12">
-                                            <label for="image-verified">Image Verification</label>
-                                            <input type="text" name="image-verified" id="image-verified"
-                                                value="Not Verified" class="form-control round-input bg-danger"
-                                                disabled>
 
-                                            <button type="submit" id="btn-submit"
-                                                class="form-control bg-danger">Vote</button>
-                                            <button type="reset" class="form-control">Reset</button>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', () => {
-                                            const video = document.getElementById('video');
-                                            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                                                navigator.mediaDevices.getUserMedia({
-                                                        video: true
-                                                    })
-                                                    .then((stream) => {
-                                                        video.srcObject = stream;
-                                                        // Send each frame to the Django endpoint for image detection
-                                                        setInterval(() => {
-                                                            const canvas = document.createElement('canvas');
-                                                            canvas.width = video.videoWidth;
-                                                            canvas.height = video.videoHeight;
-                                                            const context = canvas.getContext('2d');
-                                                            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                            <div class="category-list" id="governor-list" style="display:none;">
+                                                <!-- List of governor candidates -->
+                                                <h1>Governor</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($governors as $governor)
+                                                        <x-candidate-vote-view :candidate=$governor />
+                                                    @endforeach
+                                                </div>
+                                            </div>
 
-                                                            const imageData = canvas.toDataURL('image/jpeg');
-                                                            var ajax = new XMLHttpRequest();
-                                                            ajax.open("POST", "verify_visual/", true);
-                                                            ajax.setRequestHeader("Content-type", "application/json");
-                                                            ajax.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}");
-                                                            ajax.onload = function() {
-                                                                var responseJSON = JSON.parse(ajax.responseText);
-                                                                console.log(responseJSON);
-                                                                if (responseJSON.voter_verified) {
-                                                                    // remove a value from a class and add another
-                                                                    if (document.getElementById("btn-submit").classList.contains(
-                                                                            "bg-danger")) {
-                                                                        document.getElementById("image-verified").classList.remove(
-                                                                            "bg-danger");
-                                                                        document.getElementById("image-verified").classList.add(
-                                                                            "bg-success");
-                                                                        document.getElementById("btn-submit").classList.remove(
-                                                                            "bg-danger");
-                                                                        document.getElementById("btn-submit").classList.add(
-                                                                            "bg-success");
-                                                                    }
-                                                                } else {
-                                                                    if (document.getElementById("btn-submit").classList.contains(
-                                                                            "bg-success")) {
-                                                                        document.getElementById("image-verified").classList.remove(
-                                                                            "bg-success");
-                                                                        document.getElementById("image-verified").classList.add(
-                                                                            "bg-danger");
-                                                                        document.getElementById("btn-submit").classList.remove(
-                                                                            "bg-success");
-                                                                        document.getElementById("btn-submit").classList.add(
-                                                                            "bg-danger");
-                                                                    }
-                                                                }
-                                                                console.log("ClassProperties:", document.getElementById(
-                                                                    "image-verified").classList.toString())
-                                                            };
-                                                            ajax.send(JSON.stringify({
-                                                                imageData
-                                                            }));
-                                                        }, 3000); // Adjust the interval based on your requirements
-                                                    })
-                                                    .catch((error) => {
-                                                        console.error('Error accessing camera:', error);
-                                                    });
-                                            } else {
-                                                console.error('getUserMedia is not supported');
-                                            }
-                                        });
-                                    </script>
+                                            <div class="category-list" id="senetor-list" style="display:none;">
+                                                <!-- List of senetor candidates -->
+                                                <h1>Senetor</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($senators as $senator)
+                                                        <x-candidate-vote-view :candidate=$senator />
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div class="category-list" id="women-rep-list" style="display:none;">
+                                                <!-- List of women-rep candidates -->
+                                                <h1>Women Representative</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($womenRepresentatives as $womanRepresentative)
+                                                        <x-candidate-vote-view :candidate=$womanRepresentative />
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div class="category-list" id="mp-list" style="display:none;">
+                                                <!-- List of mp candidates -->
+                                                <h1>MP</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($mps as $mp)
+                                                        <x-candidate-vote-view :candidate=$mp />
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div class="category-list" id="mca-list" style="display:none;">
+                                                <!-- List of mca candidates -->
+                                                <h1>MCA</h1>
+                                                <div class="row"
+                                                    style="    display: flex;flex-direction: row;flex-wrap: wrap;align-content: center;justify-content: center;align-items: center;">
+                                                    @foreach ($mcas as $mca)
+                                                        <x-candidate-vote-view :candidate=$mca />
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                style="display: flex;flex-direction: row;flex-wrap: nowrap;align-content: center;justify-content: center;align-items: center;margin-top: 20px">
+                                                <input class="btn btn-danger " style="margin-right: 20px" type="reset"
+                                                    value="Reset" id="btn-submit">
+                                                <input class="btn btn-outline-success " type="submit"
+                                                    value="Submit Vote" style="margin-left: 20px" id="btn-submit">
+                                            </div>
+                                        </form>
+                                    </section>
                                 </div>
-                            </form>
+                            </div>
                         </section>
-                    </div>
-                </div>
+                    </section>
+                </section>
             </section>
         </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const categories = document.querySelectorAll('.category');
+                categories.forEach(function(category) {
+                    category.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const categoryToShow = this.getAttribute('data-category');
+                        showCategory(categoryToShow);
+                    });
+                });
+
+                function showCategory(category) {
+                    const categoryLists = document.querySelectorAll('.category-list');
+                    categoryLists.forEach(function(list) {
+                        if (list.id === category + '-list') {
+                            list.style.display = 'block';
+                        } else {
+                            list.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        </script>
+
     </body>
 </x-master-voter>
