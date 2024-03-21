@@ -11,6 +11,8 @@ use App\Models\ElectionTypes;
 use App\Models\PoliticalParties;
 use App\Models\PoliticalPositions;
 use App\Models\User;
+use App\Models\Voted;
+use App\Models\Votes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -183,11 +185,17 @@ class ElectionController extends Controller
 
     public function voting()
     {
+        $todayDate = Carbon::now("Africa/Nairobi")->toDateTimeString();
+        $election = Elections::where("start_date", "<=", $todayDate)->where("end_date", ">", $todayDate)
+            ->where("election_status", "=", 2/*ONGOING*/)->first(["id", "election_type"]);
+        $electionID = $election["id"];
+        $electionType  = $election["election_type"];
+
         $userConstituency = Constituencies::where("id", "=", auth()->user()->constituency_id)->first();
         // $userCounty = Counties::where("id", "=", $userConstituency->county_id)->first();
         $constituenciesInCounty = Constituencies::where("county_id", $userConstituency->county_id)->get(["id", "constituency", "county_id"])->pluck("id")->toArray();
         // no filters
-        $presidents = Candidates::where("vie_position_id", "=", 1)->join("users", function ($join) {
+        $presidents = Candidates::where("vie_position_id", "=", 1)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->join("political_parties AS parties", function ($join) {
             $join->on("candidates.party_id", "=", "parties.id");
@@ -198,7 +206,7 @@ class ElectionController extends Controller
         ])->orderBy("candidates.id")->get();
 
         // be from same county as voter
-        $governors = Candidates::where("vie_position_id", "=", 2)->join("users", function ($join) {
+        $governors = Candidates::where("vie_position_id", "=", 2)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->whereIn("users.constituency_id", $constituenciesInCounty)
             ->join("political_parties AS parties", function ($join) {
@@ -209,7 +217,7 @@ class ElectionController extends Controller
                 "parties.party", "parties.party_image"
             ])->orderBy("candidates.id")->get();
 
-        $senators = Candidates::where("vie_position_id", "=", 3)->join("users", function ($join) {
+        $senators = Candidates::where("vie_position_id", "=", 3)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->whereIn("users.constituency_id", $constituenciesInCounty)
             ->join("political_parties AS parties", function ($join) {
@@ -220,7 +228,7 @@ class ElectionController extends Controller
                 "parties.party", "parties.party_image"
             ])->orderBy("candidates.id")->get();
 
-        $womenReps = Candidates::where("vie_position_id", "=", 4)->join("users", function ($join) {
+        $womenReps = Candidates::where("vie_position_id", "=", 4)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->whereIn("users.constituency_id", $constituenciesInCounty)
             ->join("political_parties AS parties", function ($join) {
@@ -232,7 +240,7 @@ class ElectionController extends Controller
             ])->orderBy("candidates.id")->get();
 
         // be from same constituency
-        $mps = Candidates::where("vie_position_id", "=", 5)->join("users", function ($join) {
+        $mps = Candidates::where("vie_position_id", "=", 5)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->where("users.constituency_id", "=", $userConstituency)
             ->join("political_parties AS parties", function ($join) {
@@ -243,7 +251,7 @@ class ElectionController extends Controller
                 "parties.party", "parties.party_image"
             ])->orderBy("candidates.id")->get();
 
-        $mcas = Candidates::where("vie_position_id", "=", 5)->join("users", function ($join) {
+        $mcas = Candidates::where("vie_position_id", "=", 5)->where("candidates.election_id", "=", $electionID)->join("users", function ($join) {
             $join->on("candidates.user_id", "=", "users.id");
         })->where("users.constituency_id", "=", $userConstituency)
             ->join("political_parties AS parties", function ($join) {
@@ -254,6 +262,14 @@ class ElectionController extends Controller
                 "parties.party", "parties.party_image"
             ])->orderBy("candidates.id")->get();
 
+        // check if the user has voted
+        $voted = Votes::where("voter_id", "=", auth()->user()->id)->where("election_id", "=", $electionID)->first();
+
+        if ($voted) { // user was found in the votes table
+            $voted = true;
+        } else {
+            $voted = false;
+        }
 
 
         // dd($constituenciesInCounty, $governors);
@@ -265,9 +281,74 @@ class ElectionController extends Controller
                 [
                     "presidents" => $presidents, "governors" => $governors, "senators" => $senators,
                     "womenRepresentatives" => $womenReps, "mps" => $mps, "mcas" => $mcas,
-                    "voted" => 0,
+                    "voted" => $voted,
+                    "electionType" => $electionType, // TODO: will be used to make sure all the fields are filled
+                    "electionID" => $electionID,
                 ]
             );
         }
+    }
+
+    public function castVote(Request $request)
+    {
+        $electionID = $request->input("election-id");
+
+        $forPresident = $request->input("vote-1");
+        $forGovernor = $request->input("vote-2");
+        $forSenator = $request->input("vote-3");
+        $forWomenRep = $request->input("vote-4");
+        $forMP = $request->input("vote-5");
+        // $forMCA = $request->input("vote-6");
+        $voted = Votes::where("voter_id", "=", auth()->user()->id)->where("election_id", "=", $electionID)->first();
+        if (!$voted) { // prevent updating votes on page refresh
+            if ($forPresident) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forPresident)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forPresident)->update(["total_votes" => $votes]);
+            }
+
+            if ($forGovernor) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forGovernor)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forGovernor)->update(["total_votes" => $votes]);
+            }
+
+            if ($forSenator) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forSenator)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forSenator)->update(["total_votes" => $votes]);
+            }
+
+            if ($forWomenRep) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forWomenRep)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forWomenRep)->update(["total_votes" => $votes]);
+            }
+
+            if ($forMP) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forMP)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forMP)->update(["total_votes" => $votes]);
+            }
+
+            /*if ($forMCA) {
+                // get the president with that ID
+                $votes = Candidates::where("id", $forMCA)->where("election_id", "=", $electionID)->first("total_votes")["total_votes"];
+                $votes++;
+                Candidates::where("id", "=", $forMCA)->update(["total_votes" => $votes]);
+            }*/
+
+            // mark the voter as voted
+            Votes::create(["voter_id" => auth()->user()->id, "election_id" => $electionID]);
+        }
+
+        // dd($electionID, $forPresident, $forGovernor, $forSenator, $forWomenRep, $forMP, /*$forMCA*/);
+
+        return back();
     }
 }

@@ -159,6 +159,7 @@ Route::get("profile", [SystemUserController::class, "get_profile"])->middleware(
 
 // Voter election
 Route::get("election", [ElectionController::class, "voting"])->middleware("auth");
+Route::post("election/vote", [ElectionController::class, "castVote"])->middleware("auth");
 // End Voter election
 
 // Voter complain

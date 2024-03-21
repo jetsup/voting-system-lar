@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('voted', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId("voter_id")->nullable()->constrained("users")->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId("election_id")->nullable()->constrained("elections")->nullOnDelete()->cascadeOnUpdate();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('voted');
+        Schema::dropIfExists('votes');
     }
 };

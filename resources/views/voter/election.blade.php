@@ -1,4 +1,9 @@
 <x-master-voter>
+    <script>
+        function validateVoteSelection(electionType) {
+            // get all the radio field names and check that all are checked, have values, if not highlight
+        }
+    </script>
     @csrf
     @section('sidebar')
         <aside>
@@ -35,12 +40,12 @@
                             <span>MP</span>
                         </a>
                     </li>
-                    <li class="sub-menu">
+                    {{-- <li class="sub-menu">
                         <a class="category" href="#" data-category="mca">
                             <i class=""></i>
                             <span>MCA</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <!-- sidebar menu end-->
             </div>
@@ -62,9 +67,16 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <section class="panel">
-                                        <form class="form-horizontal" action="/election/vote" method="POST"
-                                            enctype="multipart/form-data">
+
+                                        <form class="form-horizontal"
+                                            @if (!$voted) action="/election/vote"{{-- ensure the upload path is not shown if not voting --}} @endif
+                                            method="POST" enctype="multipart/form-data"
+                                            onsubmit="validateVoteSelection({{ $electionType }})">
                                             @csrf
+
+                                            {{-- For tracking current election --}}
+                                            <input type="number" name="election-id" id="election-id"
+                                                value="{{ $electionID }}" hidden>
 
                                             <div class="category-list" id="president-list">
                                                 <!-- List of president candidates -->
@@ -121,7 +133,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="category-list" id="mca-list" style="display:none;">
+                                            {{-- TODO For MCA data for ward will need to be added to get a finite response --}}
+                                            {{-- <div class="category-list" id="mca-list" style="display:none;">
                                                 <!-- List of mca candidates -->
                                                 <h1>MCA</h1>
                                                 <div class="row"
@@ -130,16 +143,18 @@
                                                         <x-candidate-vote-view :candidate=$mca />
                                                     @endforeach
                                                 </div>
-                                            </div>
-
-                                            <div
-                                                style="display: flex;flex-direction: row;flex-wrap: nowrap;align-content: center;justify-content: center;align-items: center;margin-top: 20px">
-                                                <input class="btn btn-danger " style="margin-right: 20px" type="reset"
-                                                    value="Reset" id="btn-submit">
-                                                <input class="btn btn-outline-success " type="submit"
-                                                    value="Submit Vote" style="margin-left: 20px" id="btn-submit">
-                                            </div>
+                                            </div> --}}
+                                            @if (!$voted)
+                                                <div
+                                                    style="display: flex;flex-direction: row;flex-wrap: nowrap;align-content: center;justify-content: center;align-items: center;margin-top: 20px">
+                                                    <input class="btn btn-danger " style="margin-right: 20px"
+                                                        type="reset" value="Reset" id="btn-submit">
+                                                    <input class="btn btn-outline-success " type="submit"
+                                                        value="Submit Vote" style="margin-left: 20px" id="btn-submit">
+                                                </div>
+                                            @endif
                                         </form>
+
                                     </section>
                                 </div>
                             </div>
