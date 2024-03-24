@@ -99,7 +99,7 @@
                                     <!-- List of president candidates -->
                                     <h1>President</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -114,18 +114,23 @@
                                             <tbody>
                                                 {{-- loop the data --}}
                                                 @foreach ($presidents as $president)
-                                                    <tr>
-                                                        <td><img src="{{ asset($president->dp) }}" alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $president->first_name }} {{ $president->last_name }}
-                                                        </td>
-                                                        <td>{{ $president->party }}</td>
-                                                        <td>{{ $president->party_image }}</td>
-                                                        <td>{{ $president->total_votes }}</td>
-                                                        <td> {{ $presidents->cast_votes }}</td>
-                                                        <td>{{ ($president->total_votes / $presidents->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($president) && get_class($president) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $president->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $president->first_name }}
+                                                                {{ $president->last_name }}
+                                                            </td>
+                                                            <td>{{ $president->party }}</td>
+                                                            <td>{{ $president->party_image }}</td>
+                                                            <td>{{ $president->total_votes }}</td>
+                                                            <td> {{ $presidents['cast_votes'] }}</td>
+                                                            <td>{{ ($president->total_votes / $presidents['cast_votes']) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
@@ -137,7 +142,7 @@
                                     <!-- List of governor candidates -->
                                     <h1>Governor</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -152,18 +157,22 @@
                                             <tbody>
                                                 {{-- loop the data --}}
                                                 @foreach ($governors as $governor)
-                                                    <tr>
-                                                        <td><img src="{{ asset($governor->dp) }}" alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $governor->first_name }} {{ $governor->last_name }}
-                                                        </td>
-                                                        <td>{{ $governor->party }}</td>
-                                                        <td>{{ $governor->party_image }}</td>
-                                                        <td>{{ $governor->total_votes }}</td>
-                                                        <td> {{ $governors->cast_votes }}</td>
-                                                        <td>{{ ($governor->total_votes / $governors->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($governor) && get_class($governor) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $governor->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $governor->first_name }} {{ $governor->last_name }}
+                                                            </td>
+                                                            <td>{{ $governor->party }}</td>
+                                                            <td>{{ $governor->party_image }}</td>
+                                                            <td>{{ $governor->total_votes }}</td>
+                                                            <td> {{ $governors['cast_votes'] }}</td>
+                                                            <td>{{ ($governor->total_votes / $governors['cast_votes']) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
@@ -175,7 +184,7 @@
                                     <!-- List of senetor candidates -->
                                     <h1>Senetor</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -190,18 +199,22 @@
                                             <tbody>
                                                 {{-- loop the data --}}
                                                 @foreach ($senators as $senator)
-                                                    <tr>
-                                                        <td><img src="{{ asset($senator->dp) }}" alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $senator->first_name }} {{ $senator->last_name }}
-                                                        </td>
-                                                        <td>{{ $senator->party }}</td>
-                                                        <td>{{ $senator->party_image }}</td>
-                                                        <td>{{ $senator->total_votes }}</td>
-                                                        <td> {{ $senators->cast_votes }}</td>
-                                                        <td>{{ ($senator->total_votes / $senators->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($senator) && get_class($senator) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $senator->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $senator->first_name }} {{ $senator->last_name }}
+                                                            </td>
+                                                            <td>{{ $senator->party }}</td>
+                                                            <td>{{ $senator->party_image }}</td>
+                                                            <td>{{ $senator->total_votes }}</td>
+                                                            <td> {{ $senators['cast_votes'] }}</td>
+                                                            <td>{{ ($senator->total_votes / $senators['cast_votes']) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
@@ -213,7 +226,7 @@
                                     <!-- List of women-rep candidates -->
                                     <h1>Women Representative</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -228,20 +241,23 @@
                                             <tbody>
                                                 {{-- loop the data --}}
                                                 @foreach ($womenRepresentatives as $womanRepresentative)
-                                                    <tr>
-                                                        <td><img src="{{ asset($womanRepresentative->dp) }}"
-                                                                alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $womanRepresentative->first_name }}
-                                                            {{ $womanRepresentative->last_name }}
-                                                        </td>
-                                                        <td>{{ $womanRepresentative->party }}</td>
-                                                        <td>{{ $womanRepresentative->party_image }}</td>
-                                                        <td>{{ $womanRepresentative->total_votes }}</td>
-                                                        <td> {{ $womenRepresentatives->cast_votes }}</td>
-                                                        <td>{{ ($womanRepresentative->total_votes / $womenRepresentatives->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($womanRepresentative) && get_class($womanRepresentative) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $womanRepresentative->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $womanRepresentative->first_name }}
+                                                                {{ $womanRepresentative->last_name }}
+                                                            </td>
+                                                            <td>{{ $womanRepresentative->party }}</td>
+                                                            <td>{{ $womanRepresentative->party_image }}</td>
+                                                            <td>{{ $womanRepresentative->total_votes }}</td>
+                                                            <td> {{ $womenRepresentatives['cast_votes'] }}</td>
+                                                            <td>{{ ($womanRepresentative->total_votes / $womenRepresentatives['cast_votes']) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
@@ -253,7 +269,7 @@
                                     <!-- List of mp candidates -->
                                     <h1>MP</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -268,18 +284,22 @@
                                             <tbody>
                                                 {{-- loop the data --}}
                                                 @foreach ($mps as $mp)
-                                                    <tr>
-                                                        <td><img src="{{ asset($mp->dp) }}" alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $mp->first_name }} {{ $mp->last_name }}
-                                                        </td>
-                                                        <td>{{ $mp->party }}</td>
-                                                        <td>{{ $mp->party_image }}</td>
-                                                        <td>{{ $mp->total_votes }}</td>
-                                                        <td> {{ $mps->cast_votes }}</td>
-                                                        <td>{{ ($mp->total_votes / $mps->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($mp) && get_class($mp) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $mp->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $mp->first_name }} {{ $mp->last_name }}
+                                                            </td>
+                                                            <td>{{ $mp->party }}</td>
+                                                            <td>{{ $mp->party_image }}</td>
+                                                            <td>{{ $mp->total_votes }}</td>
+                                                            <td> {{ $mps['cast_votes'] }}</td>
+                                                            <td>{{ ($mp->total_votes / $mps['cast_votes']) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
@@ -292,7 +312,7 @@
                                     <!-- List of mca candidates -->
                                     <h1>MCA</h1>
                                     <div class="">
-                                        <table style="width: 100%;border-collapse: collapse;">
+                                        <table class="table">
                                             <thead>
                                                 <tr>
                                                     <th>Profile</th>
@@ -306,18 +326,22 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($mcas as $mca)
-                                                    <tr>
-                                                        <td><img src="{{ asset($mca->dp) }}" alt="Profile Image">
-                                                        </td>
-                                                        <td>{{ $mca->first_name }} {{ $mca->last_name }}
-                                                        </td>
-                                                        <td>{{ $mca->party }}</td>
-                                                        <td>{{ $mca->party_image }}</td>
-                                                        <td>{{ $mca->total_votes }}</td>
-                                                        <td> {{ $mcas->cast_votes }}</td>
-                                                        <td>{{ ($mca->total_votes / $mcas->cast_votes) * 100 }}
-                                                        </td>
-                                                    </tr>
+                                                    @if (is_object($mca) && get_class($mca) == 'App\Models\Candidates')
+                                                        <tr>
+                                                            <td><img src="{{ asset('storage/' . $mca->dp) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
+                                                            <td>{{ $mca->first_name }} {{ $mca->last_name }}
+                                                            </td>
+                                                            <td>{{ $mca->party }}</td>
+                                                            <td>{{ $mca->party_image }}</td>
+                                                            <td>{{ $mca->total_votes }}</td>
+                                                            <td> {{ $mcas["cast_votes"] }}</td>
+                                                            <td>{{ ($mca->total_votes / $mcas["cast_votes"]) * 100 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 @endforeach
 
                                             </tbody>
