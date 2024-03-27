@@ -399,6 +399,7 @@
             var x = document.getElementById("password");
             if (x.type == "password") {
                 x.type = "text";
+                document.getElementById("toggle-password-visibility").
             } else {
                 x.type = "password";
             }
@@ -427,7 +428,8 @@
                     <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
                         <input name="password" class="input100" required type="password" placeholder="Password"
                             id="password">
-                        <i class="fa fa-eye" style="position: absolute;left: 355px; bottom: 16px;" onclick="show()"></i>
+                        <i class="fa fa-eye" id="toggle-password-visibility"
+                            style="position: absolute;left: 355px; bottom: 16px;" onclick="show()"></i>
                     </div>
 
                     <div class="container-login100-form-btn p-t-10">

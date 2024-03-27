@@ -4,6 +4,7 @@
             if (provinceID == "") {
                 document.getElementById("county").innerHTML = "<option value=''>-- SELECT PROVINCE --</option>";
                 document.getElementById("constituency").innerHTML = "<option value=''>-- SELECT COUNTY --</option>";
+                document.getElementById("tbody-candidates").innerHTML = "";
                 return;
             }
             var ajax = new XMLHttpRequest();
@@ -16,6 +17,7 @@
                     option += "<option value='" + list[i]['id'] + "'>" + list[i]['county'] + "</option>";
                 }
                 document.getElementById("county").innerHTML = option;
+                getCandidates();
             };
             ajax.send();
         }
@@ -36,6 +38,7 @@
                         "</option>";
                 }
                 document.getElementById("constituency").innerHTML = option;
+                getCandidates();
             };
             ajax.send();
         }
@@ -106,6 +109,52 @@
             };
             ajax.send();
         }
+
+        function getCandidates() {
+            let provinceID = document.getElementById("province").value;
+            if (provinceID == "") {
+                return;
+            }
+            let countyID = document.getElementById("county").value;
+            // 0 - for province 1 - for county 2- for constituency
+            let queryFor = 0;
+            let placeID = provinceID;
+            if (countyID != "") {
+                queryFor = 1;
+                placeID = countyID;
+            }
+            let constituencyID = document.getElementById("constituency").value;
+            console.log(provinceID, " ", countyID, " ", constituencyID);
+
+            if (constituencyID != "") {
+                queryFor = 2;
+                placeID = constituencyID;
+            }
+            let ajax = new XMLHttpRequest();
+            ajax.open("GET", "/data/view-candidates/" + queryFor + "/" + placeID, true);
+            ajax.onload = function() {
+                if (this.status == 200) {
+                    let candidates = JSON.parse(this.responseText).candidates;
+                    console.log(candidates);
+
+                    let tbody = document.getElementById("tbody-candidates");
+                    let trData = "";
+
+                    for (let i = 0; i < candidates.length; i++) {
+                        trData += `<tr>
+                            <td><img src=` + "storage/" + candidates[i].dp + ` alt="Candidate Image" width="10%" style="width: 40px"></td>
+                            <td>` + candidates[i].first_name + " " + candidates[i].last_name + `</td>
+                            <td>` + candidates[i].party + `</td>
+                            <td><img src=` + "storage/" + candidates[i].party_image + ` alt="Candidate Image" width="10%" style="width: 40px"></td>
+                            <td>` + candidates[i].position + `</td>
+                            <td>` + candidates[i].constituency + ` (` + candidates[i].county + `)` + `</td>
+                            </tr>`
+                    }
+                    tbody.innerHTML = trData;
+                }
+            };
+            ajax.send();
+        }
     </script>
 
     <body>
@@ -159,29 +208,70 @@
                                     <label class="col-sm-2 control-label">Constituency</label>
                                     <div class="col-sm-10">
                                         <select name="constituency" class="form-control" id="constituency"
-                                            style="width:80%;" required>
+                                            style="width:80%;" onchange="getCandidates()" required>
                                         </select>
                                     </div>
                                 </div>
-                                <div style="margin-top: 180px">
+                                {{-- <div style="margin-top: 180px">
                                     <div class="col-lg-offset-2 col-lg-10">
                                         <button class="btn btn-primary" name="view_candidate" type="submit"
                                             onclick="filterCandidates()">Filter</button>
-                                    </div>
-                                </div>
+                                    </div> --}}
+                            </div>
+                    </div>
+            </section>
+            </div>
+            </div>
+
+            <div id="candidates-div">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Party</th>
+                                        <th>Party Logo</th>
+                                        <th>Position</th>
+                                        <th>Location</th>
+                                    </thead>
+
+                                    <tbody id="tbody-candidates">
+                                        {{-- whole country --}}
+                                        @if ($candidates)
+                                            @foreach ($candidates as $candidate)
+                                                <tr>
+                                                    <td>
+                                                        <img src="{{ asset('storage/' . $candidate->dp) }}"
+                                                            alt="Candidate Image" width="10%" style="width: 40px">
+                                                    </td>
+                                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}
+                                                    </td>
+                                                    <td>{{ $candidate->party }}</td>
+                                                    <td>
+                                                        <img src="{{ asset('storage/' . $candidate->party_image) }}"
+                                                            alt="Candidate Image" width="10%" style="width: 40px">
+                                                    </td>
+                                                    <td>{{ $candidate->position }}</td>
+                                                    <td>{{ $candidate->constituency }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
                     </div>
                 </div>
-
-                <div id="candidates-div">
-                </div>
-                {{-- <div>
+            </div>
+            {{-- <div>
         {% for message in messages %}
         <h3 align="center">{{message}}</h3>
         {% endfor %}
     </div> --}}
-            </section>
+        </section>
         </section>
     </body>
 </x-master-admin>

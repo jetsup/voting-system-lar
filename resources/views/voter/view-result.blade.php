@@ -124,7 +124,11 @@
                                                                 {{ $president->last_name }}
                                                             </td>
                                                             <td>{{ $president->party }}</td>
-                                                            <td>{{ $president->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $president->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $president->total_votes }}</td>
                                                             <td> {{ $presidents['cast_votes'] }}</td>
                                                             <td>{{ ($president->total_votes / $presidents['cast_votes']) * 100 }}
@@ -166,7 +170,11 @@
                                                             <td>{{ $governor->first_name }} {{ $governor->last_name }}
                                                             </td>
                                                             <td>{{ $governor->party }}</td>
-                                                            <td>{{ $governor->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $governor->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $governor->total_votes }}</td>
                                                             <td> {{ $governors['cast_votes'] }}</td>
                                                             <td>{{ ($governor->total_votes / $governors['cast_votes']) * 100 }}
@@ -208,7 +216,11 @@
                                                             <td>{{ $senator->first_name }} {{ $senator->last_name }}
                                                             </td>
                                                             <td>{{ $senator->party }}</td>
-                                                            <td>{{ $senator->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $senator->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $senator->total_votes }}</td>
                                                             <td> {{ $senators['cast_votes'] }}</td>
                                                             <td>{{ ($senator->total_votes / $senators['cast_votes']) * 100 }}
@@ -251,7 +263,11 @@
                                                                 {{ $womanRepresentative->last_name }}
                                                             </td>
                                                             <td>{{ $womanRepresentative->party }}</td>
-                                                            <td>{{ $womanRepresentative->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $womanRepresentative->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $womanRepresentative->total_votes }}</td>
                                                             <td> {{ $womenRepresentatives['cast_votes'] }}</td>
                                                             <td>{{ ($womanRepresentative->total_votes / $womenRepresentatives['cast_votes']) * 100 }}
@@ -293,7 +309,11 @@
                                                             <td>{{ $mp->first_name }} {{ $mp->last_name }}
                                                             </td>
                                                             <td>{{ $mp->party }}</td>
-                                                            <td>{{ $mp->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $mp->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $mp->total_votes }}</td>
                                                             <td> {{ $mps['cast_votes'] }}</td>
                                                             <td>{{ ($mp->total_votes / $mps['cast_votes']) * 100 }}
@@ -335,7 +355,11 @@
                                                             <td>{{ $mca->first_name }} {{ $mca->last_name }}
                                                             </td>
                                                             <td>{{ $mca->party }}</td>
-                                                            <td>{{ $mca->party_image }}</td>
+                                                            <td>
+                                                                <img src="{{ asset('storage/' . $mca->party_image) }}"
+                                                                    alt="Profile Image" width="10%"
+                                                                    style="width: 40px">
+                                                            </td>
                                                             <td>{{ $mca->total_votes }}</td>
                                                             <td> {{ $mcas["cast_votes"] }}</td>
                                                             <td>{{ ($mca->total_votes / $mcas["cast_votes"]) * 100 }}

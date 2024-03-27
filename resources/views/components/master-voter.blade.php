@@ -100,14 +100,31 @@
 
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/view-candidate">Candidate</a></li>
-                    <li><a href="/election">Election</a></li>
-                    <li><a href="/view-result">Result</a></li>
-                    <li><a href="/view-report">Report</a></li>
-                    <li><a href="/complain">Complain</a></li>
-                    {{-- <li class="buy-tickets"><a href="/logout">Logout</a></li> --}}
+                    <li>
+                        <a style="{{ Request::is('/') || Request::is('voting-process') ? 'color: #fff;' : '' }}"
+                            href="/">Home</a>
+                    </li>
+                    <li>
+                        <a style="{{ Request::is('profile') ? 'color: #fff;' : '' }}" href="/profile">Profile</a>
+                    </li>
+                    <li>
+                        <a style="{{ Request::is('view-candidate') ? 'color: #fff;' : '' }}"
+                            href="/view-candidate">Candidate</a>
+                    </li>
+                    <li>
+                        <a style="{{ Request::is('election') ? 'color: #fff;' : '' }}" href="/election">Election</a>
+                    </li>
+                    <li>
+                        <a style="{{ Request::is('view-result') ? 'color: #fff;' : '' }}"
+                            href="/view-result">Result</a>
+                    </li>
+                    {{-- <li>
+                        <a style="{{ Request::is('view-report') ? 'color: #fff;' : '' }}" href="/view-report">Report</a>
+                    </li> --}}
+                    <li>
+                        <a style="{{ Request::is('complain') ? 'color: #fff;' : '' }}" href="/complain">Complain</a>
+                    </li>
+
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown" href="#" style="a:focus color:#797979">
                             <span class="profile-ava">
@@ -123,9 +140,9 @@
                             <li class="eborder-top">
                                 <a href="/profile"><i class="icon_profile"></i> Profile</a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="vchangepassword"><i class="fa fa-key"></i>Change password</a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="/logout" style="background-color: #040919 !important"><i
                                         class="fa fa-unlock-alt"></i> Log
@@ -142,7 +159,7 @@
     Intro Section
   ============================-->
 
-  @yield('sidebar')
+    @yield('sidebar')
 
     @csrf
     {{ $slot }}

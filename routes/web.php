@@ -75,13 +75,7 @@ Route::post("update-candidate", [CandidateController::class, "updateCandidate"])
 
 Route::get("delete-candidate", [CandidateController::class, "deleteCandidate"])->middleware("auth");
 
-Route::get("view-candidate", function () {
-    if (auth()->user()->user_type_id == 1) {
-        return view("admin/view-candidate");
-    } else {
-        return view("voter/view-candidate");
-    }
-})->middleware("auth");
+Route::get("view-candidate", [CandidateController::class, "viewCandidates"])->middleware("auth");
 
 Route::get("data/view-candidates/{queryTypeID}/{placeID}", [CandidateController::class, "getCandidates"])->middleware("auth");
 // End Admin candidate
@@ -198,4 +192,6 @@ Route::get("data/get-party-logo/{partyID}", [ElectionController::class, "getPart
 Route::get("data/election-statuses", [ElectionController::class, "getElectionStatuses"])->middleware("auth");
 
 Route::get("data/election-results", [ElectionController::class, "generateElectionResults"])->middleware("auth");
+
+Route::get("data/get-candidates/{queryFor}/{placeID}", [CandidateController::class,"getCandidatesByLocation"])->middleware("auth");
 // End DataRequests

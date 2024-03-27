@@ -1,5 +1,6 @@
 <x-master-voter>
     <script>
+        // TODO: Take this functions to admin side
         function getCounties(provinceID) {
             if (provinceID == "") {
                 document.getElementById("county").innerHTML = "<option value=''>-- SELECT PROVINCE --</option>";
@@ -36,13 +37,52 @@
                         "</option>";
                 }
                 document.getElementById("constituency").innerHTML = option;
+                getCandidates();
+            };
+            ajax.send();
+        }
+
+        function getCandidates() {
+            let countyID = document.getElementById("county").value;
+            if (countyID == "") {
+                return;
+            }
+            let constituencyID = document.getElementById("constituency").value;
+            // 1 - for county 2- for constituency
+            let queryFor = 1;
+            let placeID = countyID;
+            if (constituencyID != "") {
+                queryFor = 2;
+                placeID = constituencyID;
+            }
+            let ajax = new XMLHttpRequest();
+            ajax.open("GET", "/data/get-candidates/" + queryFor + "/" + placeID, true);
+            ajax.onload = function() {
+                if (this.status == 200) {
+                    let candidates = JSON.parse(this.responseText).candidates;
+                    console.log(candidates);
+
+                    let tbody = document.getElementById("tbody-candidates");
+                    let trData = "";
+
+                    for (let i = 0; i < candidates.length; i++) {
+                        trData += `<tr>
+                            <td><img src=` + "storage/" + candidates[i].dp + ` alt="Candidate Image" width="10%" style="width: 40px"></td>
+                            <td>` + candidates[i].first_name + " " + candidates[i].last_name + `</td>
+                            <td>` + candidates[i].party + `</td>
+                            <td><img src=` + "storage/" + candidates[i].party_image + ` alt="Candidate Image" width="10%" style="width: 40px"></td>
+                            <td>` + candidates[i].position + `</td>
+                            </tr>`
+                    }
+                    tbody.innerHTML = trData;
+                }
             };
             ajax.send();
         }
     </script>
 
     <body>
-        <section id="main-content" style="margin-left:0px;margin-top: 60px;">
+        <section id="main-content" style="margin-left:0px;">
             <section class="wrapper" style="margin-top:60px;">
                 <div class="row">
                     <div class="col-lg-12">
@@ -52,8 +92,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <section class="panel">
-                            <div class="panel-body">
-                                <form class="form-horizontal" action="vview_candidate" id="CandidateCustomFilter"
+                            {{-- TODO: Migrate this to admin side --}}
+                            {{-- <div class="panel-body">
+                                <form class="form-horizontal" action="view-candidate" id="CandidateCustomFilter"
                                     method="POST">
                                     @csrf
                                     <div class="form-group">
@@ -91,7 +132,7 @@
                                         <label class="col-sm-2 control-label">Constituency</label>
                                         <div class="col-sm-10">
                                             <select name="constituency" class="form-control" id="constituency"
-                                                style="width:80%;height:34px;">
+                                                style="width:80%;height:34px;" onchange="getCandidates()">
                                             </select>
                                         </div>
                                     </div>
@@ -102,38 +143,42 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div> --}}
+
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Party</th>
+                                        <th>Party Logo</th>
+                                        <th>Position</th>
+                                    </thead>
+
+                                    <tbody id="tbody-candidates">
+                                        @if ($candidates)
+                                            @foreach ($candidates as $candidate)
+                                                <tr>
+                                                    <td>
+                                                        <img src="{{ asset('storage/' . $candidate->dp) }}"
+                                                            alt="Candidate Image" width="10%" style="width: 40px">
+                                                    </td>
+                                                    <td>{{ $candidate->first_name }} {{ $candidate->last_name }}</td>
+                                                    <td>{{ $candidate->party }}</td>
+                                                    <td>
+                                                        <img src="{{ asset('storage/' . $candidate->party_image) }}"
+                                                            alt="Candidate Image" width="10%" style="width: 40px">
+                                                    </td>
+                                                    <td>{{$candidate->position}}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
                     </div>
                 </div>
-                {{-- {% for candidate in candidates %}
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="profile-widget profile-widget-info">
-            <div class="panel-body" style="background-color: rgba(6, 12, 34, 0.98);">
-              <div class="col-lg-2 col-sm-2 mt-4">
-                <div class="follow-ava">
-                  <a><img src="{{candidate.candidate_identity.voter_image.url}}" alt="" class="het-90"></a>
-                </div>
-                <p><strong>{{candidate.name}}</strong></p>
-              </div>
-              <div class="col-lg-4 col-sm-4 follow-info">
-                <p><strong>Province :</strong> {{candidate.candidate_identity.province_id|get_province}}</p>
-                <p><strong>County:</strong> {{candidate.candidate_identity.county_id|get_county}}</p>
-                <p><strong>Constituency:</strong> {{candidate.candidate_identity.constituency_id|get_constituency}}</p>
-                <p><strong>Party :</strong> {{candidate.candidate_party_id|get_party}}</p>
-                <p><strong><a href="{{candidate.affidavit.url}}" target="_blank">Download Affidavit</a></strong></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %} --}}
-                {{-- <div>
-        {% for message in messages %}
-        <h3 align="center">{{message}}</h3>
-        {% endfor %}
-      </div> --}}
             </section>
         </section>
     </body>
