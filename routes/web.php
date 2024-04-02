@@ -4,6 +4,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\ComplainsController;
 use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PoliticalPartiesController;
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoterController;
@@ -176,6 +177,9 @@ Route::get("register", function () {
 })->middleware("auth");
 
 Route::post("add_voter", [UserController::class, "store"])->middleware("auth");
+
+Route::get("create-party", [PoliticalPartiesController::class, "create"]);
+Route::post("create-party", [PoliticalPartiesController::class, "create"]);
 // End Authentication
 
 /************************DATA FETCH API(JSON)*****************************/
@@ -193,5 +197,5 @@ Route::get("data/election-statuses", [ElectionController::class, "getElectionSta
 
 Route::get("data/election-results", [ElectionController::class, "generateElectionResults"])->middleware("auth");
 
-Route::get("data/get-candidates/{queryFor}/{placeID}", [CandidateController::class,"getCandidatesByLocation"])->middleware("auth");
+Route::get("data/get-candidates/{queryFor}/{placeID}", [CandidateController::class, "getCandidatesByLocation"])->middleware("auth");
 // End DataRequests
