@@ -138,6 +138,17 @@
 
                     <li class="sub-menu">
                         <a href="javascript:;" class="">
+                            <i class="fa fa-users"></i>
+                            <span>Parties</span>
+                            <span class="menu-arrow arrow_carrot-right"></span>
+                        </a>
+                        <ul class="sub">
+                            <li><a class="" href="/create-party">Create Party</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu">
+                        <a href="javascript:;" class="">
                             <i class="icon_document_alt"></i>
                             <span>Election</span>
                             <span class="menu-arrow arrow_carrot-right"></span>
