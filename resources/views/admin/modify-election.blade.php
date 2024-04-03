@@ -178,13 +178,12 @@
                                             <script>
                                                 // Fetch the database for the election id using ajax
                                                 var ajax = new XMLHttpRequest();
-                                                ajax.open("GET", "/data/get-elections/1", true);
+                                                ajax.open("GET", "/data/get-elections/0"/*upcoming|ongoing can be edited*/, true);
                                                 ajax.onload = function() {
                                                     var list = JSON.parse(this.responseText).elections;
                                                     var option = "<option value=''>-- ELECTION ID --</option>";
                                                     for (var i = 0; i < list.length; i++) {
-                                                        option += "<option value='" + list[i].id + "'>" + list[i].election_type +
-                                                            " [" + list[i].start_date + " - " + list[i].end_date + "]" + "</option>";
+                                                        option += "<option value='" + list[i].id + "'>"+ list[i].type+ " [" + list[i].start_date + " - " + list[i].end_date + "]" + "</option>";
                                                     }
                                                     document.getElementsByName("election-id")[0].innerHTML = option;
                                                 };

@@ -318,10 +318,9 @@
                                                             <td> {{ $mps['cast_votes'] }}</td>
                                                             <td>{{ ($mp->total_votes / $mps['cast_votes']) * 100 }}
                                                             </td>
-                                                        </tr>
+                                                        </tr>                                                        
                                                     @endif
                                                 @endforeach
-
                                             </tbody>
                                         </table>
                                     </div>

@@ -158,9 +158,8 @@ Route::post("election/vote", [ElectionController::class, "castVote"])->middlewar
 // End Voter election
 
 // Voter complain
-Route::get("complain", [ComplainsController::class, "complain"]/*function () {
-    return view("voter/complain");
-}*/)->middleware("auth");
+Route::get("complain", [ComplainsController::class, "complain"])->middleware("auth");
+Route::post("complain", [ComplainsController::class, "complain"])->middleware("auth");
 // End Voter complain
 /********************END VOTER********************/
 // End Page Routes
