@@ -120,8 +120,8 @@
                             <img src="{{ asset('images/voting.png') }}" class="card-img-top mt-2" height="200"
                                 width="200" alt="Image not found">
                             <div class="card-body">
-                                <h5 class="card-title">VOTING</h5>
-                                <a href="/voting" class="btn btn-primary btn-block">Polling Booth</a>
+                                <h5 class="card-title">Parties</h5>
+                                <a href="/create-party" class="btn btn-primary btn-block">Create Party</a>
                             </div>
                         </div>
 
