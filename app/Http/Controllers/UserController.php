@@ -6,6 +6,7 @@ use App\Models\Constituencies;
 use App\Models\Counties;
 use App\Models\Provinces;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +16,6 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
-        // dd($request);
         $formFields = $request->validate([
             "first_name" => ["required", "min:3"],
             "last_name" => ["required", "min:3"],
@@ -34,6 +34,16 @@ class UserController extends Controller
             // "account_type_id" => [Rule::in([0, 1, 2])],
             "dp" => ["image", "mimes:jpeg,png,jpg,gif,svg", "max:6144"],
         ]);
+        $birthdate = Carbon::parse($formFields["dob"]);
+        $eighteenYearsAgo = Carbon::now()->subYears(18);
+        $isEighteenOrAbove = $birthdate->lte($eighteenYearsAgo);
+
+        if(!$isEighteenOrAbove){
+            // dd("YOUNG");
+            return back()->with("error", "The user is under age");
+        }
+
+        // dd($formFields["dob"], $birthdate);
         // make dp required and use a default avatar img
         $dpFile = $request->file("dp");
         $imagePath = $dpFile ? $dpFile->store("images/dp", "public") : "/images/user.png";
@@ -51,7 +61,10 @@ class UserController extends Controller
         $formFields["password"] = bcrypt($formFields["password"]);
         // dd($formFields);
         // create the user
-        User::create($formFields);
+        
+        $user = User::create($formFields);
+
+        // dd($user);
 
         // redirect back to adding new user
         return back()->with("message", "Voter added successfully!");

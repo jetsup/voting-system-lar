@@ -5,6 +5,7 @@
         }
     </script>
     @csrf
+    @if($electionType != -1)
     @section('sidebar')
         <aside>
             <div id="sidebar" class="nav-collapse" style="background-color: rgba(21, 30, 65, 0.98);">
@@ -51,6 +52,7 @@
             </div>
         </aside>
     @endsection
+    @endif
 
     <body>
         <section id="main-content" style="margin-left: 180px; margin-right: 50px;margin-top: 70px;height: fit-content;">
@@ -67,7 +69,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <section class="panel">
-
+@if($electionType!=-1)
                                         <form class="form-horizontal"
                                             @if (!$voted) action="/election/vote"{{-- ensure the upload path is not shown if not voting --}} @endif
                                             method="POST" enctype="multipart/form-data"
@@ -154,7 +156,12 @@
                                                 </div>
                                             @endif
                                         </form>
+@else
 
+<div class="panel-body">
+    <center>There is no ongoing election</center>
+</div>
+@endif
                                     </section>
                                 </div>
                             </div>

@@ -90,24 +90,15 @@
                                     <tr>
                                         <th>Complain ID</th>
                                         <th>Your Complain</th>
-                                        <th>Complain Reply</th>
+                                        <th>Ressolved</th>
                                     </tr>
                                 </thead>
-                                {{-- {% for i in reply %}
-                                <tbody>
-                                    <tr>
-                                        <td>{{ i . id }}</td>
-                                        <td>{{ i . complain }}</td>
-                                        <td>{{ i . complain_reply }}</td>
-                                    </tr>
-                                </tbody>
-                                {% endfor %} --}}
                                 <tbody>
                                     @foreach ($complains as $complain)
                                         <tr>
                                             <td>{{ $complain->id }}</td>
-                                            <td>{{ $complain->message }}</td>
-                                            {{-- <td>{{ $complain->reply }}</td> --}}
+                                            <td>{{ $complain->complain }}</td>
+                                            <td>{{ ($complain->resolved == 1) ? "Ressolved" : "Pending" }}</td>
                                             <td></td>
                                         </tr>
                                     @endforeach

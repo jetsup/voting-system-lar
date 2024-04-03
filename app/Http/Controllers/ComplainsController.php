@@ -43,6 +43,7 @@ class ComplainsController extends Controller
                 return view("admin/complain");
             } else {
                 $complains = Complains::where("from", "=", auth()->user()->id)->get();
+                // dd($complains);
                 return view("voter/complain", ["complains" => $complains]);
             }
         }

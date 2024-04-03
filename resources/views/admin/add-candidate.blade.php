@@ -87,10 +87,20 @@
                 if (this.status == 200) {
                     let positions = JSON.parse(this.responseText).positions;
                     let positionsSelector = document.getElementById("position")
+                    console.log(positions[0].id, " > ", positions[0].position, positions.length);
                     let options = "";
-                    for (let i = 0; i < positions.length; i++) {
-                        options += "<option value='" + positions[i].id + "'>" + positions[i].position + "</option>"
-                    }
+                    // for (let i = 0; i < positions.length; i++) {
+                    //     options += "<option value='" + positions[i].id + "'>" + positions[i].position + "</option>"
+                    // }
+                    positionsSelector.innerHTML = options;
+                    const keys = Object.keys(positions);
+
+                    keys.forEach(key => {
+                        const id = positions[key].id;
+                        const position = positions[key].position;
+                        console.log(id, position);
+                        options += "<option value='" + positions[key].id + "'>" + positions[key].position + "</option>"
+                    });
                     positionsSelector.innerHTML = options;
                 }
             };
